@@ -56,6 +56,20 @@ failed          Recording didn't work. Try again.   [ Try again ]
   recording is gone. Nothing is written to storage, `localStorage`, IndexedDB or the network.
 - **Denied, no microphone, failed**: show the sentence from the wireframe with `Try again`, which
   asks again. `role="status"` for the sentence.
+- **Playback fails**: if `Hear yourself` cannot start (`play()` rejects) or the audio errors while
+  playing, the state stays `recorded` with the take kept, the button returns to `Hear yourself`, and
+  a `role="status"` line reads `The recording didn't play. Try again.` Pressing `Hear yourself`
+  again retries the same take; it never asks for the microphone again. Only `Record again` does.
+- **While recording, Danish hearing is off**: in the `recording` state the Specimen's play button is
+  `aria-disabled="true"` (and shows no stop glyph), so Danish speech can never enter the take and
+  there is exactly one control named `Stop`. The `asking` state leaves it enabled; recording cancels
+  any speech when it starts. `hear_entry` in the `recording` state answers
+  `{ ok: false, started: false, reason: 'recording' }`.
+- **Notices on this page**: while the recorder can play a take, the entry page's two sound notices
+  are reworded, because they must not say there is no sound at all: no Danish voice `This device has
+  no Danish voice, so the word has no sound. Use the sound guide above.`; no speech API `This
+  browser can't play the Danish voice. Use the sound guide above.` (these replace spec 01's wording
+  on entry pages; the Sounds page keeps its own).
 - **Independent of progress**: recording or playing back never lights a window; `I said it` works
   exactly as before, in every recorder state.
 - **Copy**: the privacy line `Your recording stays on this device and is gone when you leave this
@@ -68,8 +82,10 @@ failed          Recording didn't work. Try again.   [ Try again ]
 
 ## WebMCP
 
-Tools never start the microphone: consent is the learner's own gesture. `get_entry` gains one
-field, `recording: 'none'|'asking'|'recording'|'recorded'|'denied'|'no-microphone'|'failed'|'unsupported'`
+Tools never start or stop the microphone themselves: consent is the learner's own gesture, and no
+tool is named for recording. Leaving an entry by any route (the buttons, `go_to`, `open_lesson`)
+stops an active recording as cleanup, exactly as the Leaving rule says; that is not a tool stopping
+it. `hear_entry`'s `reason` gains `'recording'`. `get_entry` gains one field, `recording: 'none'|'asking'|'recording'|'recorded'|'denied'|'no-microphone'|'failed'|'unsupported'`
 (`'none'` is `idle`). No new tool. `public/llms.txt` is unchanged except that the `get_entry`
 line says it also returns the recorder's state. The tools test and the sync test are updated.
 
@@ -94,10 +110,24 @@ Tests fake `navigator.mediaDevices.getUserMedia`, `MediaRecorder`, `URL.createOb
 5. **Independence**: `I said it` lights the window in every recorder state; recording never does.
 6. **No persistence**: after a full record, play, leave cycle nothing new is in `localStorage`, and
    no source file mentions `indexedDB`, `fetch(`, `XMLHttpRequest`, `sendBeacon` or `WebSocket`.
-7. **WebMCP**: `get_entry.recording` is correct in each state; no tool starts or stops recording;
-   `llms.txt` and the registered names agree.
+7. **WebMCP**: `get_entry.recording` is correct in each state; no tool is named for recording and
+   none starts it; navigating with `go_to` or `open_lesson` while recording stops and cleans up the
+   recording; `hear_entry` answers `reason: 'recording'` while recording; `llms.txt` and the
+   registered names agree.
+8. **Playback and notices**: a rejected or errored `play()` shows `The recording didn't play. Try
+   again.`, keeps the take, and a second press retries without a new microphone request; during
+   `recording` the Specimen button is `aria-disabled` and only one control is named `Stop`; the two
+   reworded sound notices show for no Danish voice and no speech API while `Hear yourself` still
+   works.
 
 ## Answers to the grill
+
+- **`go_to` and recording**: navigation stops an active recording as cleanup; no tool is a
+  record or stop control. The Acceptance and WebMCP text say so.
+- **Playback failure**: `The recording didn't play. Try again.`, same take retried, no new
+  microphone request.
+- **Hearing during recording**: disabled; `hear_entry` answers `reason: 'recording'`.
+- **Notices**: reworded on entry pages so they never claim there is no sound at all.
 
 - The 20 second limit, the `Waiting for permission…` label and every sentence above are final.
 - The recorder block is part of the entry page only; Sounds and the done page do not get one.
