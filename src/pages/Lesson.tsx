@@ -155,7 +155,7 @@ function LessonEntry({ lesson, position }: { lesson: LessonData; position: numbe
             to={isLast ? `/lesson/${lesson.id}/done` : `/lesson/${lesson.id}/${position + 1}`}
             {...stylex.props(ui.focusable, ui.button, ui.primary, styles.grow)}
           >
-            {isLast ? 'Finish' : <>Next: <span lang="da">{next.da}</span></>}
+            {isLast ? 'Finish' : <span>Next: <span lang="da">{next.da}</span></span>}
           </Link>
         </div>
       </main>

@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react'
+import { cleanup, screen } from '@testing-library/react'
 import { getLesson } from '../catalog'
 import { ENTRY_IDS, ENTRY_IDS_2, LESSON, LESSON_2, renderAt, seedProgress } from '../test/render'
 import { byContent } from '../test/text'
@@ -24,6 +24,17 @@ describe('lesson 2 on the other pages', () => {
     renderAt('/lesson/hvem-er-du/1')
     expect(screen.getByRole('link', { name: 'Next: Du' })).toHaveAttribute('href', '/lesson/hvem-er-du/2')
     expect(screen.getByRole('button', { name: 'Back' })).toBeDisabled()
+  })
+
+  it('spaces the Next label once after the colon, inside one wrapper so the flex button keeps the space', () => {
+    for (const [position, danish] of [[4, 'Hvordan har du det?'], [7, 'Hyggeligt at møde dig']] as const) {
+      renderAt(`/lesson/hvem-er-du/${position}`)
+      const next = screen.getByRole('link', { name: `Next: ${danish}` })
+      expect(next.children).toHaveLength(1)
+      expect(next.firstElementChild).toHaveTextContent(`Next: ${danish}`)
+      expect(next.querySelector('[lang="da"]')).toHaveTextContent(danish)
+      cleanup()
+    }
   })
 
   it('celebrates on the done page with its own praise, title and count', () => {

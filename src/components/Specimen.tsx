@@ -3,7 +3,7 @@ import type { Entry, LessonColor } from '../catalog'
 import type { useSpeech } from '../speech/useSpeech'
 import { fonts, space } from '../styles/tokens.stylex'
 import { facade } from './facade'
-import { PlayButton } from './PlayButton'
+import { PLAY_OVERHANG, PlayButton } from './PlayButton'
 import { Pronunciation } from './Pronunciation'
 import { wordSize } from './wordSize'
 
@@ -14,11 +14,12 @@ const styles = stylex.create({
     boxSizing: 'border-box',
     minHeight: 170,
     paddingTop: 44,
-    paddingBottom: 20,
     paddingInline: 22,
     clipPath:
       'polygon(0 26px, 14% 26px, 14% 17px, 28% 17px, 28% 8px, 44% 8px, 44% 0, 56% 0, 56% 8px, 72% 8px, 72% 17px, 86% 17px, 86% 26px, 100% 26px, 100% 100%, 0 100%)',
   },
+  // The last line must end above the play button, which reaches this far up into the pane.
+  clearButton: (paddingBottom: number) => ({ paddingBottom }),
   word: (fontSize: string, lineHeight: number) => ({
     margin: 0,
     fontFamily: fonts.display,
@@ -55,7 +56,7 @@ export function Specimen({ entry, color, speech, onHear, recordable, hearOff }: 
   const noSpeech = recordable ? NO_SPEECH_REC : NO_SPEECH
   return (
     <div {...stylex.props(styles.seam)}>
-      <div {...stylex.props(styles.danish, facade[color])}>
+      <div {...stylex.props(styles.danish, styles.clearButton(PLAY_OVERHANG), facade[color])}>
         <h1 tabIndex={-1} lang="da" {...stylex.props(styles.word(size.specimen, size.specimenLine))}>{entry.da}</h1>
         <Pronunciation respelling={entry.respelling} ipa={entry.ipa} />
         {speech.noVoice && (
