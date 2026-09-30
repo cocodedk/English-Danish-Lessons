@@ -1,0 +1,12 @@
+node_modules/
+dist/
+coverage/
+.vite/
+.vitest.json
+*.log
+.env
+.env.*
+*.local
+.DS_Store
+scratchpad/
+.claude/settings.local.json

@@ -1,0 +1,11 @@
+# Hej. Danish for English speakers
+
+> A free, static, mobile-first web app that teaches English speakers to hear and say Danish. No accounts, no backend; progress stays in the browser's localStorage.
+
+## WebMCP tools
+
+Every page of this site declares WebMCP tools with `document.modelContext.registerTool`, so an agent in the visitor's browser can read what is on screen and act through the same code as the buttons. The tools appear as the visitor moves between pages; each page's `describe` tool says what is on it. Spec 01 fills in the tool list below, page by page.
+
+## Source
+
+- [Repository](https://github.com/cocodedk/English-Danish-Lessons)
