@@ -112,7 +112,7 @@ Paragraphs: `Danish r is made far back in the throat, close to a gentle gargle.`
 |---|---|---|---|---|---|
 | `tre` | Tre | Three | treh | `[ˈtʁɛˀ]` | The r comes from the back of the throat. |
 | `bro` | Bro | Bridge | broh | `[ˈbʁoˀ]` | Same r, after the b. |
-| `bror` | Bror | Brother | BROH-uh | `[ˈbʁoɐ̯]` | The last r fades into a short uh. |
+| `bror` | Bror | Brother | broa | `[ˈbʁoɐ̯]` | One syllable: the last r fades into a short uh glide. |
 
 ### `stoed`: mark `ˀ`, colour `salvie`, title `The stød`
 
@@ -169,6 +169,14 @@ The tests prove, at least:
 6. **Static**: the usual no-network, no-colour-literal and built-CSS checks still pass.
 
 ## Answers to the grill
+
+- **Split screen and seam**: the contract in `CLAUDE.md` governs lesson entry pages. A Sounds
+  example is a compact row inside a card (Danish word, then the two pronunciation helps, then the
+  English), not a specimen: no facade pane and no seam. `CLAUDE.md` now says so.
+- **"I said it"**: only lesson entries have it. Sounds is reference and practice with no progress,
+  so there is no confirmation state and nothing stored. `CLAUDE.md` now says so.
+- **`bror` respelling**: `broa`, one syllable, because DDO's `[ˈbʁoɐ̯]` ends in a non-syllabic glide.
+  A hand-made guide, flagged for the owner's review with the rest.
 
 - No lit windows, no storage, no progress for this page: a learner who never opens it loses
   nothing, and opening it changes nothing stored.

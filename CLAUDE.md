@@ -18,12 +18,14 @@ their product rules are, as written below.
 
 ## Product contract (non-negotiable)
 
-- **Split screen**: the Danish word on top (`lang="da"`, large), English below (`lang="en"`),
-  separated by one seam. Every taught Danish entry and every praise word shows two pronunciation
+- **Split screen** (lesson entry pages): the Danish word on top (`lang="da"`, large), English
+  below (`lang="en"`), separated by one seam. The Sounds page's example rows are compact rows in a
+  card instead. Every taught Danish entry and every praise word shows two pronunciation
   helps together: an English respelling ("Sounds like “tahg”") and IPA (`[ˈtɑɡ]`). Lesson titles
   and the wordmark are navigation labels and carry neither.
-- **Hear, then say.** Each entry: hear it, say it out loud, tap "I said it". Speaking comes before
-  reading and spelling. Danish is never hidden behind a quiz.
+- **Hear, then say.** Each lesson entry: hear it, say it out loud, tap "I said it". The Sounds page
+  is reference and practice: hear, say, no confirmation, no progress. Speaking comes before reading
+  and spelling. Danish is never hidden behind a quiz.
 - **Mobile first**: usable one-handed on a phone in portrait; nav in the thumb zone; 48 px targets.
 - **100 % static**: every lesson is data committed to the repo. No runtime request leaves the site.
 - **Browser storage only**: `localStorage`, keys `edl.v1.*`, envelope `{ schemaVersion: 1, value }`.
