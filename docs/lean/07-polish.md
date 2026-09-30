@@ -21,9 +21,10 @@ vertically, not horizontally:
 - One exported constant holds the number (name it `PLAY_OVERHANG`, in the file that defines the play
   button), derived from the button's size constant (`size / 2 + 6`), never typed twice; the pane's
   bottom padding reads it.
-- A pane whose content already needs more than the 170 px minimum height grows by 16 px; a pane
-  shorter than that keeps its 170 px minimum and does not grow at all. The 170 px minimum height
-  does not change. The play button still sits on the seam and the English pane's top padding still
+- Pane heights follow their content: a pane grows by between 0 and 16 px, by however much its
+  content plus the new padding exceeds what it needed before (a short entry such as `Tak` at 360 px
+  may grow from 170 to about 181 px; that is accepted). No pixel height of any pane is promised, only
+  that the last line ends above the button and the 170 px minimum height stays. The play button still sits on the seam and the English pane's top padding still
   clears it.
 - Line breaking is unchanged: the IPA keeps `white-space: nowrap` and never splits; the line breaks
   at the `·`, and the respelling may wrap at its own spaces when it alone is wider than the pane.
@@ -55,9 +56,9 @@ The tests prove, at least:
 ## Answers to the grill
 
 - No other visual change: no colours, sizes, copy or layout besides the two fixes.
-- The fix is the pane's bottom padding only; the minimum height stays 170 px, so short panes do not
-  change size and long ones grow by up to 16 px. A right-hand reserve would have made short entries
-  such as `Tak` wrap at 360 px, which is worse.
+- The fix is the pane's bottom padding only; the minimum height stays 170 px. Panes may grow by 0 to
+  16 px depending on content, and some short ones by a few pixels: accepted. A right-hand reserve
+  would have made short entries such as `Tak` wrap at 360 px, which is worse.
 - The respelling may wrap at its spaces, as it already could; only the IPA is kept whole.
 - No new tool, route or token.
 
