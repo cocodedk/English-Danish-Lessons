@@ -19,15 +19,16 @@ their product rules are, as written below.
 ## Product contract (non-negotiable)
 
 - **Split screen**: the Danish word on top (`lang="da"`, large), English below (`lang="en"`),
-  separated by one sill. Every Danish item shows two pronunciation helps together: an English
-  respelling ("Sounds like “tahg”") and IPA (`[ˈtɑɡ]`).
+  separated by one seam. Every taught Danish entry and every praise word shows two pronunciation
+  helps together: an English respelling ("Sounds like “tahg”") and IPA (`[ˈtɑɡ]`). Lesson titles
+  and the wordmark are navigation labels and carry neither.
 - **Hear, then say.** Each entry: hear it, say it out loud, tap "I said it". Speaking comes before
   reading and spelling. Danish is never hidden behind a quiz.
 - **Mobile first**: usable one-handed on a phone in portrait; nav in the thumb zone; 48 px targets.
 - **100 % static**: every lesson is data committed to the repo. No runtime request leaves the site.
 - **Browser storage only**: `localStorage`, keys `edl.v1.*`, envelope `{ schemaVersion: 1, value }`.
-  It must survive empty, cleared, corrupt and denied storage: the app then works for the session
-  and says so once. Nothing else is stored.
+  It must survive empty, cleared, corrupt and denied storage: the app then works until the page
+  reloads and says so on Home and Me. Nothing else is stored.
 - **Generous by design**: the learner is never shamed and nothing is ever taken away by the app.
   Progress is windows lit on a house; a finished lesson gets bunting. No lives, no timers, no
   streak loss, no red crosses. Lessons never lock each other.

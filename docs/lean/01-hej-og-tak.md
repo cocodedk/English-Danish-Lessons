@@ -110,7 +110,7 @@ sentence is in braces.
 ### Home `#/`
 
 Top to bottom: top bar (wordmark, and on desktop the two nav links); `h1` greeting; one line of
-text; the street; the continue card; the bottom nav.
+text; the street; the continue card; the bottom nav on phone and tablet.
 
 - **Greeting** `h1`: `Hej, {name}.` with a saved name, else `Hej.`
 - **Line**, by state (`n` windows lit of `N` in total): none lit `Your street is waiting. Start
@@ -121,14 +121,18 @@ text; the street; the continue card; the bottom nav.
   `#/lesson/hej-og-tak` named `Hej og tak, {n} of 8 windows lit`, then the empty plot captioned
   `Coming next`.
 - **Continue card** (`paper`, radius 22), by state:
-  - none lit: label `Start Hej og tak`; word `Hej`; line `Hello · [ˈhɑj]`; button `Start`.
+  - none lit: label `Start Hej og tak`; word `Hej`; the pronunciation line `Sounds like “hi” ·
+    [ˈhɑj]` (17/1.35); the English `Hello`; button `Start`.
   - some lit, not all: label `Next in Hej og tak`; the first unlit entry's Danish word (`lang="da"`,
-    Bricolage 800, 44 px); line `{English} · {IPA}`; button `Continue`. It links to that entry.
-  - all lit: label `Hej og tak is done`; word `Hej og tak`; line `Say it all again`; button `Practise`,
-    linking to entry 1.
+    Bricolage 800, 44 px); its pronunciation line, then its English; button `Continue`. It links to
+    that entry.
+  - all lit: label `Hej og tak is done`; word `Hej og tak` (a lesson title, a navigation label, so
+    no pronunciation line); line `Say it all again`; button `Practise`, linking to entry 1.
 - **No name yet**: under the card a text link `Add your name` to `#/me`.
 - **Storage not saving**: above the street, a `role="status"` note in a `paper` card: `This browser
-  can't save your progress, so it will be lost when you close the tab.`
+  can't save your progress. It will be lost when you reload or close the page.` It shows every time
+  Home or Me is shown while storage is not saving, and cannot be dismissed: it is a fact about the
+  page, not an interruption.
 
 ### Lesson entry `#/lesson/:lessonId/:position`
 
@@ -148,9 +152,17 @@ text; the street; the continue card; the bottom nav.
   window: skipping is allowed.
 - **Hearing** (`src/speech/`): the play button speaks the Danish with the browser's speech
   synthesis at rate 0.85. Rules:
-  - Use only a voice whose `lang` starts with `da` (case-insensitive, `da-DK` or `da_DK`). If
-    `getVoices()` is empty, wait for one `voiceschanged`, at most 1 s. Never speak with any other
-    voice: an English voice reading Danish teaches the wrong sound.
+  - Use only a voice whose `lang` starts with `da` (case-insensitive, `da-DK` or `da_DK`) **and**
+    whose `localService` is `true`. A Danish voice that is not local counts as no Danish voice: a
+    remote voice would send the text to a speech service, and no request leaves this site. Never
+    speak with any other voice either: an English voice reading Danish teaches the wrong sound.
+  - When the page mounts, read `getVoices()` once and listen to `voiceschanged` for the life of the
+    page. If voices are known and none qualifies, show the no-voice state at once. If the list is
+    empty, show nothing yet.
+  - The one-second wait for voices happens on a tap, never on load. On a tap the button goes at once
+    to the speaking state (stop glyph, `aria-label` `Stop`, `aria-busy="true"` while it looks up); if
+    a qualifying voice appears within 1 s it speaks, otherwise the button returns to play and the
+    no-voice state shows.
   - While speaking, the button shows a stop glyph and `aria-label` `Stop`; pressing it cancels. It
     returns to play on `end`, `error` or cancel. Starting a new one cancels the last.
   - No Danish voice: the button is `aria-disabled="true"` and a `role="note"` line appears under the
@@ -161,7 +173,9 @@ text; the street; the continue card; the bottom nav.
 
 ### Done `#/lesson/:lessonId/done`
 
-Live region on mount announces the result.
+A visually hidden `role="status"` region announces the result on mount, exactly: all lit
+`All 8 windows lit. Velkommen!`; part lit `{n} of 8 windows lit. {8 - n} left to light.` (`1 left to
+light.` when one remains); none lit `No windows lit yet.`
 
 - **All eight lit**: the bunting drops (motion 2); `h1` the praise word (`lang="da"`), then its
   pronunciation line, then `Welcome` (26/700); the large house, all windows lit; a chip
@@ -182,7 +196,8 @@ Live region on mount announces the result.
    Feedback in a `role="status"` line: `Name saved.` / `Name removed.`
 2. **Colours**: a radio group, legend `Colour mode`, options `Auto`, `Light`, `Dark`, shown as one
    segmented control; hint `Auto follows your phone or computer.` Changing it applies at once.
-3. **Your progress**: `{n} of {N} windows lit.` and a secondary button `Delete progress`, opening a
+3. **Your progress**: `{n} of {N} windows lit.` With no windows lit it reads `No windows lit yet.`
+   and there is no delete button. Otherwise a secondary button `Delete progress` opens a
    native `<dialog>` (modal): title `Delete your progress?`, text `Every lit window on your street
    goes dark. You can't undo this.`, buttons `Delete progress` (primary) and `Keep it` (secondary,
    focused first). Escape and `Keep it` close it and change nothing. Deleting closes it, clears
@@ -191,11 +206,41 @@ Live region on mount announces the result.
 4. **Privacy**: `Hej saves your name, your progress and your colour choice in this browser only.
    Nothing is sent anywhere, and there are no accounts.`
 
-The storage-not-saving note (Home) appears at the top of this page too.
+The storage-not-saving note (Home) appears at the top of this page too. Layout: no preview exists
+for Me or Not found, so build them from the same parts as Home and match its look: top bar, `h1`
+(Bricolage 700 44, `ink`), then on Me each section as a `paper` card (radius 22, padding 20, 32 px
+between cards) with its `h2` (Bricolage 700 26), body 17 `ink`, hints 15 `ink-soft`, buttons as in
+ART-DIRECTION, left-aligned, max width 720 from 600 px up. No houses, no facade colours.
+
+```
+ME (phone)
+┌──────────────────────────┐
+│ Hej.                     │
+│ Me                       │
+│ ┌──────────────────────┐ │
+│ │ Your name            │ │
+│ │ [ Name field       ] │ │
+│ │ [Save name] [Remove] │ │
+│ └──────────────────────┘ │
+│ ┌ Colours ─ (Auto|Light|Dark) ┐
+│ ┌ Your progress ─ 3 of 8 … ┐  │
+│ ┌ Privacy ─ text ─────────┐  │
+│   Street        Me         │
+└──────────────────────────┘
+```
 
 ### Not found
 
-`h1` `That page doesn't exist.`, one primary link `Back to your street`.
+`h1` `That page doesn't exist.`, one primary link `Back to your street`. Same look and gutters as
+Me, content left-aligned under the top bar, nothing else.
+
+### Navigation by page
+
+The main nav (`Street`, `Me`) is a bottom bar on phone and tablet and moves into the top bar on
+desktop (see ART-DIRECTION). It appears on Home (`Street` current), Me (`Me` current) and Not
+found (nothing current, no `aria-current`). Lesson entry and Done are focused flows and have no
+main nav: the entry page has the back chip in its top bar, and Done ends in its own buttons and
+shows only the wordmark in its top bar.
 
 ## WebMCP
 
@@ -266,11 +311,15 @@ request says the number. The tests prove, at least:
 4. **Pre-paint script**: executed against `index.html`'s own script text with a seeded
    `localStorage`: `dark` and `light` set `data-theme`, `auto`, missing and corrupt data set nothing,
    a throwing `localStorage` does not throw.
-5. **Speech**: a Danish voice is chosen and the utterance uses it at rate 0.85; only a non-Danish
-   voice available means nothing is spoken and the note shows; `voiceschanged` is waited for at
-   most 1 s; a second press cancels; `error` resets the button; no `speechSynthesis` shows the
-   no-support note.
-6. **Home**: every state of the greeting, the line and the continue card; the house shows the
+5. **Speech**: a local Danish voice is chosen and the utterance uses it at rate 0.85; a Danish voice
+   with `localService: false`, or only non-Danish voices, means nothing is spoken and the note
+   shows; with known voices and none qualifying the note shows on mount without a tap; with an empty
+   list nothing shows until a tap, the button is busy during the wait, `voiceschanged` is waited for
+   at most 1 s on that tap only; a second press cancels; `error` resets the button; no
+   `speechSynthesis` shows the no-support note.
+6. **Home**: every state of the greeting, the line and the continue card (with its respelling and
+   IPA); the main nav is present on Home, Me and Not found with the right current link, and absent
+   on Lesson entry and Done; the house shows the
    lit windows from storage; the link names; `Add your name` appears only without a name; the
    storage note appears only when storage is not saving.
 7. **Lesson entry**: every field of the entry is on screen with `lang="da"` on the Danish; "I said it"
@@ -278,15 +327,18 @@ request says the number. The tests prove, at least:
    entry offers `Finish`; skipping works; bad positions and unknown lessons render Not found; the
    bare lesson URL redirects to the first unlit entry.
 8. **Done**: all-lit shows the praise, the chip and the bunting; not-all-lit and none-lit show the
-   gentle versions and the right link targets.
-9. **Me**: saving, removing, over-length and unchanged names; colour mode changes `data-theme` and
+   gentle versions and the right link targets; the live region says exactly the three strings.
+9. **Me**: saving, removing, over-length and unchanged names; no delete button with nothing lit; colour mode changes `data-theme` and
    storage; the dialog opens with `Keep it` focused, Escape and `Keep it` change nothing, confirm
    clears progress and returns focus.
 10. **Routing and focus**: titles, and focus moves to the `h1` on navigation but not on first render.
 11. **WebMCP**: with a fake registry, every tool in the table is registered on its page and only
     there, `describe` answers for the current page, each tool returns its exact shape for valid
-    input and a `{ ok: false }` answer (never a throw) for `{}`, `null`-like, wrong-typed and
-    extra-key input; `delete_progress` refuses without `confirm: true`; `mark_said` and the button
+    input; the tools with required input (`open_lesson`, `go_to`, `go_from_done`, `set_name`,
+    `set_color_mode`, `delete_progress`) answer `{ ok: false, … }` for `{}`, wrong-typed and unknown
+    values; the tools with no input (`describe`, every `get_*`, `hear_entry`, `mark_said`,
+    `clear_name`, `go_to_street`) give their normal shape for `{}`, for `[]` and for extra keys, and
+    no tool ever throws; `delete_progress` refuses without `confirm: true`; `mark_said` and the button
     give the same storage; no registry means no error and a working app; an aborted signal on
     unmount; a registration that rejects does not stop the others; `llms.txt` names equal the
     registered names.
@@ -317,6 +369,26 @@ component's class names come from StyleX.
 - StyleX notes: dynamic per-lesson colours use a static map keyed by the colour name, not runtime
   values. `@media`, `:hover`, `:focus-visible` go inside the property's object. Animations use
   `stylex.keyframes`. The plugin order in `vite.config.ts` is load-bearing; leave it.
+
+## Answers to the grill
+
+- **Zero-argument tools and `{}`**: only the six tools with required input must refuse `{}`. The
+  others accept `{}`, ignore extra keys, and are tested with `[]`, extra keys and wrong types.
+- **Remote voices**: hearing needs a Danish voice with `localService === true`. The privacy and no-
+  request promises stand; a remote voice counts as no voice.
+- **Home card**: it shows the respelling and the IPA on one line, then the English. CLAUDE.md's rule
+  covers every taught entry and every praise word; lesson titles and the wordmark are navigation
+  labels.
+- **Nav**: on Home, Me and Not found only (see Navigation by page). Lesson entry and Done have none.
+- **Voice lookup**: starts on the tap, never on load; the button is busy, then returns to play with
+  the note if nothing qualifies. On load only the known-voices check runs.
+- **Me and Not found design**: no preview; built from Home's parts as described under each page.
+- **Zero lit windows on Me**: `No windows lit yet.` and no delete button.
+- **Warning text**: `This browser can't save your progress. It will be lost when you reload or
+  close the page.`
+- **How often**: every time Home or Me is shown while storage is not saving; not dismissible.
+  CLAUDE.md says "on Home and Me" accordingly.
+- **Done live region**: the three strings given under Done.
 
 ## Out of scope
 

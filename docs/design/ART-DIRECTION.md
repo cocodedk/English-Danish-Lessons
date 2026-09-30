@@ -92,7 +92,8 @@ Radii: 26 (pills), 22 (paper card, dialog, English pane), 50 % (chips, play butt
 Breakpoints: **phone** < 600, **tablet** 600–899, **desktop** ≥ 900. Content is one column, at
 most 560 px wide on lesson pages and 720 px on Home and Me, centred from 600 px up. Phone and
 tablet have a bottom nav; desktop moves the same two links into the top bar and drops the
-bottom nav.
+bottom nav. The nav appears on Home, Me and Not found only; the lesson entry and the done page
+are focused flows without it.
 
 ```
 HOME (phone)                         LESSON ENTRY (phone)
