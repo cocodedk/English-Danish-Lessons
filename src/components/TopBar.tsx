@@ -4,7 +4,7 @@ import { APP_NAME } from '../constants'
 import { colors, fonts, space } from '../styles/tokens.stylex'
 import { ui } from '../styles/ui'
 
-export type NavItem = 'street' | 'me'
+export type NavItem = 'street' | 'sounds' | 'me'
 
 // One `<nav>`: a bottom bar on phone and tablet, and inside the top bar from 900 px.
 const styles = stylex.create({
@@ -104,6 +104,7 @@ export function TopBar({ nav = false, current }: { nav?: boolean; current?: NavI
       {nav && (
         <nav aria-label="Main" {...stylex.props(styles.nav)}>
           <NavLink to="/" label="Street" current={current === 'street'} />
+          <NavLink to="/sounds" label="Sounds" current={current === 'sounds'} />
           <NavLink to="/me" label="Me" current={current === 'me'} />
         </nav>
       )}

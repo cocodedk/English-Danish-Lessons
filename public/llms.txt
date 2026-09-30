@@ -27,6 +27,11 @@ Every page of this site declares WebMCP tools with `document.modelContext.regist
 - `get_result`: Returns how many windows of this lesson are lit and the praise word.
 - `go_from_done`: Leaves the result page for your street, for entry 1, or for the first unlit entry, and returns the page.
 
+## Sounds
+
+- `get_sounds`: Returns the four sound cards with their example words and whether this device can speak Danish.
+- `hear_example`: Speaks one example word with a local Danish voice, or stops it, and returns whether it started.
+
 ## Me
 
 - `get_settings`: Returns the saved name, colour mode, windows lit and whether this browser is saving.

@@ -22,13 +22,14 @@ const styles = stylex.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  inline: { position: 'static', width: 48, height: 48, boxShadow: 'none', flexShrink: 0 },
   off: { opacity: 0.55, cursor: 'default' },
 })
 
-type Props = { da: string; status: SpeechStatus; disabled: boolean; onPress: () => void }
+type Props = { da: string; status: SpeechStatus; disabled: boolean; onPress: () => void; inline?: boolean }
 
-/** Plays the Danish, or stops it. It sits on the seam between the two panes. */
-export function PlayButton({ da, status, disabled, onPress }: Props) {
+/** Plays the Danish, or stops it. It sits on the seam between the two panes, or in a row when `inline`. */
+export function PlayButton({ da, status, disabled, onPress, inline = false }: Props) {
   const busy = status !== 'idle'
   const off = disabled && !busy // Stop stays live while a lookup or a speech runs
   return (
@@ -40,7 +41,7 @@ export function PlayButton({ da, status, disabled, onPress }: Props) {
       onClick={() => {
         if (!off) onPress()
       }}
-      {...stylex.props(ui.focusable, styles.button, off && styles.off)}
+      {...stylex.props(ui.focusable, styles.button, inline && styles.inline, off && styles.off)}
     >
       <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
         {busy ? <rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor" /> : <path d="M8 5 L19 12 L8 19 Z" fill="currentColor" />}
