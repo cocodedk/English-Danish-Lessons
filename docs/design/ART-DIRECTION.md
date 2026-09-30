@@ -63,13 +63,13 @@ Contrast floor, tested from `tokens.css` in both themes:
 
 ## Type
 
-Two families, both self-hosted (`@fontsource-variable`, latin + latin-ext, so æ ø å and IPA
-render): **Bricolage Grotesque** for display, **Atkinson Hyperlegible Next** for everything else
-including IPA. Fallback `system-ui, sans-serif`.
+Three families, all self-hosted (`@fontsource-variable`): **Bricolage Grotesque** for display,
+**Atkinson Hyperlegible Next** for everything else, and **Noto Sans** for IPA only (Atkinson lacks
+the IPA symbols; Noto Sans has them all except the combining U+032F, which falls back). Fallback `system-ui, sans-serif`.
 
 | Role | Face | Size / line | Weight | Tracking |
 |---|---|---|---|---|
-| Danish word (specimen) | Bricolage | `clamp(72px, 22vw, 96px)` / 0.95 | 800 | −0.035em |
+| Danish word (specimen) | Bricolage | by length: see spec 03's `wordSize` (short words `clamp(72px, 22vw, 96px)` / 0.95) | 800 | −0.035em |
 | Praise word (done page) | Bricolage | `clamp(44px, 13vw, 64px)` / 1 | 800 | −0.03em |
 | Page title `h1` | Bricolage | 44 / 1.02 (≥ 900 px: 56) | 700 | −0.025em |
 | Section title `h2`, English meaning | Bricolage | 26 / 1.15 | 700 / 600 | −0.01em |

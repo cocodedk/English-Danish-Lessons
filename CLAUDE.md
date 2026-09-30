@@ -50,8 +50,10 @@ Per-lesson specs live in `docs/lean/`. Only the next unmerged one is ever built.
 - Everyday Standard Danish, Copenhagen. Words come from the spec; the builder never invents Danish.
 - **IPA comes from Den Danske Ordbog (ordnet.dk)**, in DDO's own notation with two symbol
   substitutions: `g` → `ɡ` (U+0261), `ε` → `ɛ` (U+025B). Keep `ˈ` (main stress), `ˌ` (secondary) and
-  `ˀ` (stød). Where Wiktionary differs, DDO wins. Every entry is checked in both; disagreements are
-  listed in the spec.
+  `ˀ` (stød). DDO is the required source: read the entry for the right word class (a homograph can
+  differ: `du` the pronoun is `[ˈdu]`, the verb `[ˈduˀ]`). Wiktionary is an optional second opinion;
+  where it was consulted and differs, the spec lists the disagreement and DDO wins. A phrase's IPA
+  is composed from its words' entries and the spec says so.
 - The **respelling** is an English-reader approximation, written by hand in the spec: lower case,
   syllables joined by hyphens, the stressed syllable in capitals when there is more than one.
 - Danish and IPA are drafts until the owner has read them. A content PR lists every new entry in
