@@ -31,8 +31,8 @@ failed          Recording didn't work. Try again.   [ Try again ]
 
 ## Behaviour
 
-- **States**: `idle`, `asking`, `recording`, `recorded`, `denied`, `no-microphone`, `failed`,
-  `unsupported`. `unsupported` is decided on mount: no `navigator.mediaDevices.getUserMedia` or no
+- **States**: `idle`, `asking`, `recording`, `finishing`, `recorded`, `denied`, `no-microphone`,
+  `failed`, `unsupported`. `unsupported` is decided on mount: no `navigator.mediaDevices.getUserMedia` or no
   `MediaRecorder`. Everything else starts at `idle`.
 - **Record yourself** (idle, and `Try again`/`Record again`): asks for the microphone with audio only
   (`{ audio: true }`). The state is `asking` until the browser answers: the button is
@@ -45,9 +45,16 @@ failed          Recording didn't work. Try again.   [ Try again ]
   anyway). A visually hidden `role="status"` says `Recording.` on start and `Recording stopped.`
   on stop. Recording stops by itself at 20 seconds. Pressing `Stop` (or the 20 s limit) stops the
   recorder and releases every track of the stream at once.
+- **Finishing**: from that moment until the recorder has delivered its last data, the state is
+  `finishing`: the button reads `Saving…`, is `aria-disabled` and `aria-busy="true"`, the elapsed
+  time stops, and `Recording stopped.` has already been announced. When the data arrives it becomes
+  `recorded`; if there is no data (an empty `Blob`) it becomes `failed`. Leaving the entry during
+  `finishing` discards the take like any other cleanup.
 - **Recorded**: the audio is kept as one `Blob` turned into an object URL and played through an
-  `<audio>` element created in code (no visible controls). `Hear yourself` plays it and becomes
-  `Stop` while playing; it returns to `Hear yourself` when the audio ends. Playing the recording
+  `<audio>` element created in code (no visible controls). Pressing `Hear yourself` makes the
+  button read `Stop` at once (`aria-busy="true"` until `play()` has resolved); pressing `Stop`
+  while it is still starting cancels it: pause, rewind, back to `Hear yourself`, no error. When the
+  audio ends the button returns to `Hear yourself`. Playing the recording
   cancels any Danish voice; playing the Danish voice (the play button on the Specimen) stops the
   recording's playback. `Record again` discards the old recording (revoking its URL) and starts a
   new one exactly as above.
@@ -85,7 +92,7 @@ failed          Recording didn't work. Try again.   [ Try again ]
 Tools never start or stop the microphone themselves: consent is the learner's own gesture, and no
 tool is named for recording. Leaving an entry by any route (the buttons, `go_to`, `open_lesson`)
 stops an active recording as cleanup, exactly as the Leaving rule says; that is not a tool stopping
-it. `hear_entry`'s `reason` gains `'recording'`. `get_entry` gains one field, `recording: 'none'|'asking'|'recording'|'recorded'|'denied'|'no-microphone'|'failed'|'unsupported'`
+it. `hear_entry`'s `reason` gains `'recording'`. `get_entry` gains one field, `recording: 'none'|'asking'|'recording'|'finishing'|'recorded'|'denied'|'no-microphone'|'failed'|'unsupported'`
 (`'none'` is `idle`). No new tool. `public/llms.txt` is unchanged except that the `get_entry`
 line says it also returns the recorder's state. The tools test and the sync test are updated.
 
@@ -97,8 +104,9 @@ Tests fake `navigator.mediaDevices.getUserMedia`, `MediaRecorder`, `URL.createOb
 `src/test/setup.ts` or a helper. They prove, at least:
 
 1. **State machine** (a pure module, tested without React): every transition in `idle`, `asking`,
-   `recording`, `recorded`, `denied`, `no-microphone`, `failed`, `unsupported`, including the three
-   error mappings, the 20 s auto-stop, and `Record again`.
+   `recording`, `finishing`, `recorded`, `denied`, `no-microphone`, `failed`, `unsupported`,
+   including the three error mappings, the 20 s auto-stop, an empty take ending in `failed`, and
+   `Record again`; and the playback states `idle`, `starting`, `playing` with cancel while starting.
 2. **Entry page**: the recorder appears in the right place; each state shows its exact copy and its
    buttons (names, `aria-busy`, `aria-disabled`); the status messages are announced; the elapsed time
    counts up; `unsupported` shows the note and no button.
@@ -111,8 +119,8 @@ Tests fake `navigator.mediaDevices.getUserMedia`, `MediaRecorder`, `URL.createOb
 6. **No persistence**: after a full record, play, leave cycle nothing new is in `localStorage`, and
    no source file mentions `indexedDB`, `fetch(`, `XMLHttpRequest`, `sendBeacon` or `WebSocket`.
 7. **WebMCP**: `get_entry.recording` is correct in each state; no tool is named for recording and
-   none starts it; navigating with `go_to` or `open_lesson` while recording stops and cleans up the
-   recording; `hear_entry` answers `reason: 'recording'` while recording; `llms.txt` and the
+   none starts it; navigating with `go_to` (back or next) or by the router while recording stops and
+   cleans up the recording (`open_lesson` is registered only on Home, so it is not involved); `hear_entry` answers `reason: 'recording'` while recording; `llms.txt` and the
    registered names agree.
 8. **Playback and notices**: a rejected or errored `play()` shows `The recording didn't play. Try
    again.`, keeps the take, and a second press retries without a new microphone request; during
@@ -122,6 +130,10 @@ Tests fake `navigator.mediaDevices.getUserMedia`, `MediaRecorder`, `URL.createOb
 
 ## Answers to the grill
 
+- **`open_lesson`** is a Home tool and cannot be called from an entry page; the cleanup test uses
+  `go_to` and a route change.
+- **Stop and Hear yourself loading states**: `Saving…` (`finishing`) after Stop, and an immediate
+  `Stop` label with `aria-busy` while playback starts, cancellable, as described above.
 - **`go_to` and recording**: navigation stops an active recording as cleanup; no tool is a
   record or stop control. The Acceptance and WebMCP text say so.
 - **Playback failure**: `The recording didn't play. Try again.`, same take retried, no new
