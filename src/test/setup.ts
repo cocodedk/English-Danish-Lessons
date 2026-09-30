@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom/vitest'
 import { resetStorage } from '../storage/core'
+import { removeRecorder } from './recorder'
 
 // jsdom has no speech, no layout and no modal dialogs: the stubs below are what the tests use.
 class FakeUtterance {
@@ -28,6 +29,10 @@ if (typeof dialog.close !== 'function') {
   }
 }
 
+// jsdom plays no media: these keep an unmount after the test's own spies are restored quiet.
+HTMLMediaElement.prototype.play = () => Promise.resolve()
+HTMLMediaElement.prototype.pause = () => undefined
+
 beforeEach(() => {
   localStorage.clear()
   resetStorage()
@@ -36,6 +41,7 @@ beforeEach(() => {
 })
 
 afterEach(() => {
+  removeRecorder()
   Reflect.deleteProperty(window, 'speechSynthesis')
   Reflect.deleteProperty(document, 'modelContext')
   vi.useRealTimers()

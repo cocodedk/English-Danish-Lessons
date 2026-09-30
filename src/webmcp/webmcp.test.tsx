@@ -73,6 +73,7 @@ describe('webmcp', () => {
       lit: false,
       voice: 'unsupported',
       speaking: false,
+      recording: 'unsupported',
     })
     expect(await call(reg, 'hear_entry')).toEqual({ ok: false, started: false, reason: 'unsupported' })
     expect(await call(reg, 'mark_said')).toEqual({ ok: true, lit: true, windowsLit: 1, windowsTotal: 46 })

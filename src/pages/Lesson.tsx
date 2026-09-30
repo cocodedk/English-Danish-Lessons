@@ -3,10 +3,12 @@ import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { getLesson, type Entry, type Lesson as LessonData } from '../catalog'
 import { Lamp } from '../components/Lamp'
+import { Recorder } from '../components/Recorder'
 import { Specimen } from '../components/Specimen'
 import { APP_NAME } from '../constants'
 import { usePage } from '../pageHooks'
-import { useSpeech } from '../speech/useSpeech'
+import { useRecorder } from '../recorder/useRecorder'
+import { useSpeech, type HearResult } from '../speech/useSpeech'
 import { useProgress } from '../storage/hooks'
 import { lightEntry, litIds, progressStore } from '../storage/stores'
 import { colors, fonts, radii, space } from '../styles/tokens.stylex'
@@ -70,6 +72,8 @@ function LessonEntry({ lesson, position }: { lesson: LessonData; position: numbe
   const navigate = useNavigate()
   const progress = useProgress()
   const speech = useSpeech(entry.da)
+  const recorder = useRecorder(speech.stop)
+  const recording = recorder.phase === 'recording'
   const [announcement, setAnnouncement] = useState('')
   const lit = litIds(progress, lesson.id).includes(entry.id)
   usePage('lesson', `${entry.da} · ${lesson.title} · ${APP_NAME}.`)
@@ -82,13 +86,21 @@ function LessonEntry({ lesson, position }: { lesson: LessonData; position: numbe
     setAnnouncement(`Window lit. ${count} of ${total} lit.`)
   }
 
+  // The play button and the hear_entry tool both come here. The Danish never enters a take, and it stops the take's playback.
+  const hear = async (): Promise<HearResult> => {
+    if (recording) return { ok: false, started: false, reason: 'recording' }
+    recorder.stopPlayback()
+    return speech.press()
+  }
+
   useWebMcp(
     lessonTools({
       lesson,
       position,
       voice: speech.voice,
       status: speech.status,
-      hear: speech.press,
+      recording: recorder.phase === 'idle' ? 'none' : recorder.phase,
+      hear,
       said,
       go: (to) => navigate(to),
     }),
@@ -107,12 +119,20 @@ function LessonEntry({ lesson, position }: { lesson: LessonData; position: numbe
         </span>
       </div>
       <main {...stylex.props(ui.contentFocused)}>
-        <Specimen entry={entry} color={lesson.color} speech={speech} />
+        <Specimen
+          entry={entry}
+          color={lesson.color}
+          speech={speech}
+          onHear={hear}
+          recordable={recorder.phase !== 'unsupported'}
+          hearOff={recording}
+        />
         <div {...stylex.props(styles.english)}>
           <p lang="en" {...stylex.props(styles.meaning)}>{entry.en}</p>
           <p {...stylex.props(ui.body, styles.note)}>{entry.note}</p>
         </div>
         <Lamp lit={lit} />
+        <Recorder recorder={recorder} />
         <div {...stylex.props(styles.actions)}>
           <button
             type="button"

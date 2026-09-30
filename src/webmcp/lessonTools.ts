@@ -1,4 +1,5 @@
 import type { Lesson } from '../catalog'
+import type { RecordPhase } from '../recorder/machine'
 import type { HearResult, SpeechStatus } from '../speech/useSpeech'
 import { countLit, litIds, progressStore } from '../storage/stores'
 import { totalEntries } from '../catalog'
@@ -9,6 +10,7 @@ export type LessonContext = {
   position: number
   voice: 'available' | 'none' | 'unsupported'
   status: SpeechStatus
+  recording: 'none' | Exclude<RecordPhase, 'idle'>
   hear: () => Promise<HearResult>
   /** The "I said it" handler. */
   said: () => void
@@ -23,7 +25,7 @@ export function lessonTools(ctx: LessonContext): Tool[] {
   return [
     {
       name: 'get_entry',
-      description: 'Returns the Danish entry on screen with its English, sound guide, note and whether its window is lit.',
+      description: "Returns the Danish entry on screen with its English, sound guide, note, whether its window is lit and the recorder's state.",
       inputSchema: NO_INPUT,
       annotations: { readOnlyHint: true },
       run: () => ({
@@ -38,6 +40,7 @@ export function lessonTools(ctx: LessonContext): Tool[] {
         lit: isLit(),
         voice: ctx.voice,
         speaking: ctx.status !== 'idle',
+        recording: ctx.recording,
       }),
     },
     {
