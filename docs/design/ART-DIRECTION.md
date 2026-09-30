@@ -91,7 +91,7 @@ Radii: 26 (pills), 22 (paper card, dialog, English pane), 50 % (chips, play butt
 
 Breakpoints: **phone** < 600, **tablet** 600–899, **desktop** ≥ 900. Content is one column, at
 most 560 px wide on lesson pages and 720 px on Home and Me, centred from 600 px up. Phone and
-tablet have a bottom nav; desktop moves the same two links into the top bar and drops the
+tablet have a bottom nav; desktop moves the same three links (Street, Sounds, Me) into the top bar and drops the
 bottom nav. The nav appears on Home, Me and Not found only; the lesson entry and the done page
 are focused flows without it.
 
@@ -115,7 +115,7 @@ HOME (phone)                         LESSON ENTRY (phone)
 │ │ Thanks · [ˈtɑɡ]      │ │         ┌──────────────────────────┐
 │ └──────────────────────┘ │         │ ▼▼▼▼▼▼▼▼ bunting ▼▼▼▼▼▼▼ │
 │ ──────────────────────── │         │      Velkommen!          │
-│   Street        Me       │         │ Sounds like “VEL-kum-en” │
+│ Street  Sounds   Me      │         │ Sounds like “VEL-kum-en” │
 └──────────────────────────┘         │ · [ˈvɛlˌkʌmˀən]          │
                                      │ Welcome!                 │
                                      │      (large house, all   │
@@ -181,6 +181,13 @@ Focus-visible: `outline: 3px solid var(--fjord); outline-offset: 3px`, never rem
 6 px × 22 px pip above the label: `lamp` when current, transparent otherwise (`aria-current="page"`
 carries the meaning, the pip is a bonus). Labels 14/600; current `ink`, others `ink-soft`.
 
+**Sound card** (the Sounds page). A `paper` card, radius 22, padding 20, with an `h2`. A header
+row: a 72 × 72 square **tile** (no radius) in a facade colour with its `on-…` text, the sound's mark
+in Bricolage 800 (40 px; a three-letter mark at 28 px), and the `h2` beside it (16 px gap). Below:
+the explanation paragraphs, then example rows split by 1.5 px `line` hairlines: a 48 px round play
+button, the Danish word (Bricolage 800, 32 px), the pronunciation line, the English and a tip
+(15, `ink-soft`). The tile is a sign, not a house: houses mean lessons.
+
 **Wordmark**. "Hej" in Bricolage 800 followed by a `flag`-coloured full stop. It links home.
 
 ## Motion
@@ -209,8 +216,7 @@ the hero: UI copy stays out of its way.
 `docs/design/previews/board-light.png` and `board-dark.png` show Home, a lesson entry and the done
 page, on a phone. They are **layout and mood references**: where this document or the spec says
 something different, the text wins. Known differences: the previews show a theme chip in the top
-bar (there is none: the theme is chosen on Me), a third nav item "Sounds" (there are two items),
-several lesson houses (there is one, plus the empty plot), a "Say it" button beside "Hear again"
+bar (there is none: the theme is chosen on Me), several lesson houses (their number follows the catalog, and the empty plot shows only while lessons are still planned), a "Say it" button beside "Hear again"
 (the play button on the specimen is the only way to hear; the action button is "I said it"),
 6-window houses (a house has one window per entry), and placeholder Danish. The catalog is the
 authority for every Danish word, respelling and IPA string.
