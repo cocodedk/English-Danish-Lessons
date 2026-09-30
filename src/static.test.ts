@@ -25,7 +25,7 @@ describe('static app', () => {
   it('makes no network request and mentions no web address but the SVG namespace', () => {
     for (const [file, text] of Object.entries(sources)) {
       const cleaned = text.split(SVG_NS).join('')
-      for (const banned of ['fetch(', 'XMLHttpRequest', 'sendBeacon', 'WebSocket', 'http://', 'https://']) {
+      for (const banned of ['fetch(', 'XMLHttpRequest', 'sendBeacon', 'WebSocket', 'indexedDB', 'http://', 'https://']) {
         expect(cleaned.includes(banned), `${file} mentions ${banned}`).toBe(false)
       }
     }

@@ -33,23 +33,37 @@ const styles = stylex.create({
 
 const NO_VOICE = 'This device has no Danish voice, so there is no sound. Use the sound guide above.'
 const NO_SPEECH = "This browser can't play sound. Use the sound guide above."
+// Where the recorder can play a take back, the notices must not claim there is no sound at all.
+const NO_VOICE_REC = 'This device has no Danish voice, so the word has no sound. Use the sound guide above.'
+const NO_SPEECH_REC = "This browser can't play the Danish voice. Use the sound guide above."
 
-type Props = { entry: Entry; color: LessonColor; speech: ReturnType<typeof useSpeech> }
+type Props = {
+  entry: Entry
+  color: LessonColor
+  speech: ReturnType<typeof useSpeech>
+  onHear: () => void
+  /** The recorder can play a take on this page. */
+  recordable: boolean
+  /** Hearing the Danish is off, as while recording. */
+  hearOff: boolean
+}
 
 /** The Danish pane of a lesson entry: the word, its two pronunciation helps and the play button on the seam. */
-export function Specimen({ entry, color, speech }: Props) {
+export function Specimen({ entry, color, speech, onHear, recordable, hearOff }: Props) {
   const size = wordSize(entry.da)
+  const noVoice = recordable ? NO_VOICE_REC : NO_VOICE
+  const noSpeech = recordable ? NO_SPEECH_REC : NO_SPEECH
   return (
     <div {...stylex.props(styles.seam)}>
       <div {...stylex.props(styles.danish, facade[color])}>
         <h1 tabIndex={-1} lang="da" {...stylex.props(styles.word(size.specimen, size.specimenLine))}>{entry.da}</h1>
         <Pronunciation respelling={entry.respelling} ipa={entry.ipa} />
         {speech.noVoice && (
-          <p role="note" {...stylex.props(styles.small)}>{speech.supported ? NO_VOICE : NO_SPEECH}</p>
+          <p role="note" {...stylex.props(styles.small)}>{speech.supported ? noVoice : noSpeech}</p>
         )}
         {speech.failed && <p role="status" {...stylex.props(styles.small)}>The sound didn&apos;t play. Try again.</p>}
       </div>
-      <PlayButton da={entry.da} status={speech.status} disabled={speech.noVoice} onPress={speech.press} />
+      <PlayButton da={entry.da} status={speech.status} disabled={speech.noVoice || hearOff} onPress={onHear} />
     </div>
   )
 }

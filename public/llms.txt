@@ -17,7 +17,7 @@ Every page of this site declares WebMCP tools with `document.modelContext.regist
 
 ## Lesson entry
 
-- `get_entry`: Returns the Danish entry on screen with its English, sound guide, note and whether its window is lit.
+- `get_entry`: Returns the Danish entry on screen with its English, sound guide, note, whether its window is lit and the recorder's state.
 - `hear_entry`: Speaks the Danish with a local Danish voice and returns whether it started.
 - `mark_said`: Lights this entry's window, as the "I said it" button does, and returns the lit count.
 - `go_to`: Goes back, to the next entry, or to the result after the last entry, and returns the new page.

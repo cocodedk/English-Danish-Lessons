@@ -5,7 +5,7 @@ export const RATE = 0.85
 export const VOICE_WAIT_MS = 1000
 
 export type SpeechStatus = 'idle' | 'lookup' | 'speaking'
-export type HearResult = { ok: boolean; started: boolean; reason?: 'no-danish-voice' | 'unsupported' | 'error' }
+export type HearResult = { ok: boolean; started: boolean; reason?: 'no-danish-voice' | 'unsupported' | 'error' | 'recording' }
 
 /** Speaks `text` with a local Danish voice, and says so when there is none. `play` and `press` take another text for a page with many words. */
 export function useSpeech(text = '') {
@@ -92,5 +92,5 @@ export function useSpeech(text = '') {
   }, [play, stop])
 
   const voice: 'available' | 'none' | 'unsupported' = !supported ? 'unsupported' : hasVoice ? 'available' : 'none'
-  return { status, supported, noVoice, failed, voice, press, play }
+  return { status, supported, noVoice, failed, voice, press, play, stop }
 }
