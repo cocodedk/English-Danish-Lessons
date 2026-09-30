@@ -17,11 +17,18 @@ const copies = (n: number): Lesson[] => Array.from({ length: n }, (_, i) => ({ .
 
 describe('skyline', () => {
   it('shows the empty plot and Coming next while there are fewer lessons than planned', () => {
-    const { container } = draw(lessons)
-    expect(lessons.length).toBeLessThan(PLANNED_LESSONS)
+    const { container } = draw(lessons.slice(0, 2))
     expect(plot(container)).not.toBeNull()
     expect(screen.getByText('Coming next')).toBeInTheDocument()
     expect(screen.getByText('2 lessons')).toBeInTheDocument()
+  })
+
+  it('has no plot for the catalog, which reaches the planned five', () => {
+    const { container } = draw(lessons)
+    expect(lessons).toHaveLength(PLANNED_LESSONS)
+    expect(plot(container)).toBeNull()
+    expect(screen.queryByText('Coming next')).toBeNull()
+    expect(screen.getByText('5 lessons')).toBeInTheDocument()
   })
 
   it('drops the plot and Coming next once every planned lesson has a house', () => {
