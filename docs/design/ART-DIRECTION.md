@@ -131,7 +131,8 @@ HOME (phone)                         LESSON ENTRY (phone)
 - *Danish pane*: background is the lesson colour (`gul` etc.), text `on-…`. Top edge is a stepped
   gable: `clip-path: polygon(0 26px, 14% 26px, 14% 17px, 28% 17px, 28% 8px, 44% 8px, 44% 0, 56% 0,
   56% 8px, 72% 8px, 72% 17px, 86% 17px, 86% 26px, 100% 26px, 100% 100%, 0 100%)`. Padding
-  `44px 22px 20px`, min-height 170. Holds the Danish word and the pronunciation line.
+  `44px 22px 36px` (the bottom padding is the play button's half height plus 6, so the last line
+  ends above the button), min-height 170. Holds the Danish word and the pronunciation line.
 - *English pane*: `paper`, bottom radius 22, padding `18px 22px 20px`. Holds the meaning and the
   note. When the play button sits on the seam, the pane's top padding is 34.
 - *Play button*: 60 px round, `fjord` / `on-fjord`, `box-shadow: 0 0 0 5px var(--paper)` (the paper
