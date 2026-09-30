@@ -6,6 +6,7 @@ import { Home } from './pages/Home'
 import { LessonRoute } from './pages/Lesson'
 import { Me } from './pages/Me'
 import { NotFound } from './pages/NotFound'
+import { Sounds } from './pages/Sounds'
 import { usePrefs, useProgress } from './storage/hooks'
 import { firstUnlit } from './storage/stores'
 import { describeTool } from './webmcp/describe'
@@ -46,6 +47,7 @@ export function AppRoutes() {
       <Route path="/lesson/:lessonId" element={<LessonRedirect />} />
       <Route path="/lesson/:lessonId/done" element={<DoneRoute />} />
       <Route path="/lesson/:lessonId/:position" element={<LessonRoute />} />
+      <Route path="/sounds" element={<Sounds />} />
       <Route path="/me" element={<Me />} />
       <Route path="*" element={<NotFound />} />
     </Routes>

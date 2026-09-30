@@ -50,7 +50,7 @@ describe('webmcp input and registration', () => {
     for (const [, path, tools] of PAGES) {
       const reg = installModelContext()
       const { unmount } = renderAt(path)
-      for (const tool of ['describe', ...tools].filter((t) => !['open_lesson', 'go_to', 'go_from_done', 'set_name', 'set_color_mode', 'delete_progress'].includes(t))) {
+      for (const tool of ['describe', ...tools].filter((t) => !['open_lesson', 'go_to', 'go_from_done', 'hear_example', 'set_name', 'set_color_mode', 'delete_progress'].includes(t))) {
         if (tool === 'clear_name' || tool === 'go_to_street') {
           // go_to_street leaves the page and unregisters its tools, so render it again for each input
           for (const input of junk) {
@@ -96,6 +96,6 @@ describe('webmcp input and registration', () => {
     }
     const listed = Object.fromEntries([...llms.matchAll(/^- `([a-z_]+)`: (.+)$/gm)].map((m) => [m[1], m[2]]))
     expect(listed).toEqual(registered)
-    expect(Object.keys(registered)).toHaveLength(15)
+    expect(Object.keys(registered)).toHaveLength(17)
   })
 })

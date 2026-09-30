@@ -7,8 +7,8 @@ export const VOICE_WAIT_MS = 1000
 export type SpeechStatus = 'idle' | 'lookup' | 'speaking'
 export type HearResult = { ok: boolean; started: boolean; reason?: 'no-danish-voice' | 'unsupported' | 'error' }
 
-/** Speaks `text` with a local Danish voice, and says so when there is none. */
-export function useSpeech(text: string) {
+/** Speaks `text` with a local Danish voice, and says so when there is none. `play` and `press` take another text for a page with many words. */
+export function useSpeech(text = '') {
   const supported = getSynth() !== undefined
   const [voices, setVoices] = useState<readonly SpeechSynthesisVoice[]>([])
   const [status, setStatusState] = useState<SpeechStatus>('idle')
@@ -46,7 +46,7 @@ export function useSpeech(text: string) {
     setStatus('idle')
   }, [])
 
-  const play = useCallback(async (): Promise<HearResult> => {
+  const play = useCallback(async (word?: string): Promise<HearResult> => {
     const synth = getSynth()
     if (!synth) return { ok: false, started: false, reason: 'unsupported' }
     const id = ++run.current
@@ -62,7 +62,7 @@ export function useSpeech(text: string) {
     }
     setTapFoundNone(false)
     try {
-      const utterance = new SpeechSynthesisUtterance(textRef.current)
+      const utterance = new SpeechSynthesisUtterance(word ?? textRef.current)
       utterance.voice = voice
       utterance.lang = voice.lang
       utterance.rate = RATE
@@ -85,12 +85,12 @@ export function useSpeech(text: string) {
   }, [])
 
   // The play handler: the button and the hear_entry tool both come here. Pressing while speaking cancels.
-  const press = useCallback(async (): Promise<HearResult> => {
-    if (statusRef.current === 'idle') return play()
+  const press = useCallback(async (word?: string): Promise<HearResult> => {
+    if (statusRef.current === 'idle') return play(word)
     stop()
     return { ok: true, started: false }
   }, [play, stop])
 
   const voice: 'available' | 'none' | 'unsupported' = !supported ? 'unsupported' : hasVoice ? 'available' : 'none'
-  return { status, supported, noVoice, failed, voice, press }
+  return { status, supported, noVoice, failed, voice, press, play }
 }

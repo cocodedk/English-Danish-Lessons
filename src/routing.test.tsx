@@ -7,6 +7,7 @@ describe('routing and focus', () => {
       ['/', 'Hej. Danish for English speakers'],
       ['/lesson/hej-og-tak/3', 'Tak · Hej og tak · Hej.'],
       ['/lesson/hej-og-tak/done', 'Done · Hej og tak · Hej.'],
+      ['/sounds', 'Sounds · Hej.'],
       ['/me', 'Me · Hej.'],
       ['/nowhere', 'Not found · Hej.'],
     ]

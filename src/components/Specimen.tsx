@@ -1,18 +1,11 @@
 import * as stylex from '@stylexjs/stylex'
 import type { Entry, LessonColor } from '../catalog'
 import type { useSpeech } from '../speech/useSpeech'
-import { colors, fonts, space } from '../styles/tokens.stylex'
+import { fonts, space } from '../styles/tokens.stylex'
+import { facade } from './facade'
 import { PlayButton } from './PlayButton'
 import { Pronunciation } from './Pronunciation'
 import { wordSize } from './wordSize'
-
-const facade = stylex.create({
-  gul: { backgroundColor: colors.gul, color: colors.onGul },
-  tegl: { backgroundColor: colors.tegl, color: colors.onTegl },
-  hav: { backgroundColor: colors.hav, color: colors.onHav },
-  salvie: { backgroundColor: colors.salvie, color: colors.onSalvie },
-  rosa: { backgroundColor: colors.rosa, color: colors.onRosa },
-})
 
 const styles = stylex.create({
   // The play button is absolutely placed on this box's bottom edge, so it follows the seam wherever it falls.

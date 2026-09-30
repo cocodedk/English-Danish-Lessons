@@ -84,17 +84,28 @@ describe('home', () => {
     expect(card().getByRole('link', { name: 'Continue' })).toHaveAttribute('href', '/lesson/hej-og-tak/3')
   })
 
-  it('shows the main nav on Home, Me and Not found, and not on the lesson or done pages', () => {
+  it('shows the three-item main nav on Home, Sounds, Me and Not found, and not on the lesson or done pages', () => {
     const nav = () => screen.queryByRole('navigation', { name: 'Main' })
-    const current = () => within(nav()!).queryAllByRole('link').filter((l) => l.getAttribute('aria-current') === 'page')
+    const links = () => within(nav()!).getAllByRole('link')
+    const current = () => links().filter((l) => l.getAttribute('aria-current') === 'page')
     let view = renderAt('/')
+    expect(links().map((l) => [l.textContent, l.getAttribute('href')])).toEqual([
+      ['Street', '/'],
+      ['Sounds', '/sounds'],
+      ['Me', '/me'],
+    ])
     expect(current().map((l) => l.textContent)).toEqual(['Street'])
     view.unmount()
+    view = renderAt('/sounds')
+    expect(links().map((l) => l.textContent)).toEqual(['Street', 'Sounds', 'Me'])
+    expect(current().map((l) => l.textContent)).toEqual(['Sounds'])
+    view.unmount()
     view = renderAt('/me')
+    expect(links().map((l) => l.textContent)).toEqual(['Street', 'Sounds', 'Me'])
     expect(current().map((l) => l.textContent)).toEqual(['Me'])
     view.unmount()
     view = renderAt('/nowhere')
-    expect(nav()).not.toBeNull()
+    expect(links().map((l) => l.textContent)).toEqual(['Street', 'Sounds', 'Me'])
     expect(current()).toHaveLength(0)
     view.unmount()
     for (const path of ['/lesson/hej-og-tak/1', '/lesson/hej-og-tak/done']) {
