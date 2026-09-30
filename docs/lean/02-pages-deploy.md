@@ -15,7 +15,7 @@ itself does not change.
   - one job `deploy`, `runs-on: ubuntu-latest`, `environment` named `github-pages` with `url` set
     to `${{ steps.deployment.outputs.page_url }}`;
   - steps, in order, each action pinned by full commit SHA with the version as a trailing comment:
-    1. `actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4`
+    1. `actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1`
     2. `actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0`, `node-version: 24`,
        `cache: npm`
     3. `run: npm ci`
@@ -29,13 +29,15 @@ itself does not change.
   `Play it: https://cocodedk.github.io/English-Danish-Lessons/`. The address may appear in the
   README and the workflow only (CLAUDE.md allows the path in `vite.config.ts` and the workflows; the
   README link is the one documentation exception).
+- `.github/workflows/ci.yml`: the `actions/checkout` line pins the same commit but its comment says
+  `# v4`, which is wrong (the commit is v7.0.1). Change only that comment to `# v7.0.1`.
 - `package.json`: the test count in `assert-count.mjs N` rises by the new tests.
-- Nothing else changes: no other file, no `index.html` meta tags, no brand frame, no external
+- Nothing else changes: no other non-test file, no `index.html` meta tags, no brand frame, no external
   request.
 
 ## Acceptance
 
-`npm ci && npm run verify` passes. A new test file reads `.github/workflows/pages.yml` from disk
+`npm ci && npm run verify` passes. A new test file, `src/deploy.test.ts` (new tests go under `src/` like every other test), reads `.github/workflows/pages.yml` from disk
 (`node:fs`, path relative to the project root) and proves: the name; both triggers and only those;
 the three permissions and no others; the concurrency group and `cancel-in-progress: false`; the
 single job `deploy` with its environment and url expression; every `uses:` line pins a 40-character
@@ -51,6 +53,9 @@ request says the new test count.
 - Running `npm run verify` inside the deploy job is deliberate: it doubles the work of CI, and that
   is the price of never publishing a broken build.
 - The builder may change any existing test only to raise the count in `package.json`.
+- "No other file" means no other non-test file; the one new test file lives in `src/`.
+- Checked 2026-09-30: every SHA above belongs to the version in its comment (checkout is v7.0.1; the
+  `# v4` in `ci.yml` was a copy error).
 
 ## Out of scope
 
