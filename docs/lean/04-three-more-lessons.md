@@ -27,7 +27,7 @@ Title `Tal`, English title `Numbers`, colour `hav`, gable `bell`, ten entries.
 | `fem` | Fem | Five | fem | `[ˈfɛmˀ]` | Five. The m has a small catch at the end. |
 | `seks` | Seks | Six | sehgs | `[ˈsɛɡs]` | Six. The k sounds like a g. |
 | `syv` | Syv | Seven | sue | `[ˈsywˀ]` | Seven. Say ee with your lips rounded, as if for oo. |
-| `otte` | Otte | Eight | OH-duh | `[ˈɔːdə]` | Eight. The tt sounds like a soft d. |
+| `otte` | Otte | Eight | OH-duh | `[ˈɔːdə]` | Eight. The tt sounds like a d. |
 | `ni` | Ni | Nine | nee | `[ˈniˀ]` | Nine. Like the English word knee. |
 | `ti` | Ti | Ten | tee | `[ˈtiˀ]` | Ten. Like the English word tea, with a catch at the end. |
 
@@ -46,7 +46,7 @@ Title `Mad og drikke`, English title `Food and drink`, colour `salvie`, gable `c
 | `oel` | Øl | Beer | url | `[ˈøl]` | Beer. Say ur without the r. |
 | `broed` | Brød | Bread | brurth | `[ˈbʁœðˀ]` | Bread. The d is soft, like th in this. |
 | `smoer` | Smør | Butter | smur | `[ˈsmɶɐ̯]` | Butter. The ø glides into a soft r. |
-| `ost` | Ost | Cheese | awst | `[ˈɔsd]` | Cheese. The last t sounds like a soft d. |
+| `ost` | Ost | Cheese | awst | `[ˈɔsd]` | Cheese. The last t sounds like a d. |
 | `aeble` | Æble | Apple | EH-bluh | `[ˈɛːblə]` | Apple. The æ is like the e in bet, held a little longer. |
 | `suppe` | Suppe | Soup | SAW-buh | `[ˈsɔbə]` | Soup. The pp sounds like a b. |
 
