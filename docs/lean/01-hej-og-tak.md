@@ -130,7 +130,7 @@ text; the street; the continue card; the bottom nav on phone and tablet.
     no pronunciation line); line `Say it all again`; button `Practise`, linking to entry 1.
 - **No name yet**: under the card a text link `Add your name` to `#/me`.
 - **Storage not saving**: above the street, a `role="status"` note in a `paper` card: `This browser
-  can't save your progress. It will be lost when you reload or close the page.` It shows every time
+  can't save your progress, name or colour choice. They will be lost when you reload or close the page.` It shows every time
   Home or Me is shown while storage is not saving, and cannot be dismissed: it is a fact about the
   page, not an interruption.
 
@@ -193,7 +193,10 @@ light.` when one remains); none lit `No windows lit yet.`
    in this browser.` Buttons: primary `Save name`, enabled only when the trimmed input is 1..24
    characters and differs from the saved name; secondary `Remove name`, shown only when a name is
    saved. Over 24 characters: an inline error `Use 24 characters or fewer.` and Save disabled.
-   Feedback in a `role="status"` line: `Name saved.` / `Name removed.`
+   A name with a control character is refused like an over-long one: inline error `That name has a
+   character we can't save. Remove it and try again.` and Save disabled; `set_name` answers `{ ok:
+   false, error }` with the same sentence. Feedback in a `role="status"` line: `Name saved.` /
+   `Name removed.`; while storage is not saving: `Name saved for now.` / `Name removed for now.`
 2. **Colours**: a radio group, legend `Colour mode`, options `Auto`, `Light`, `Dark`, shown as one
    segmented control; hint `Auto follows your phone or computer.` Changing it applies at once.
 3. **Your progress**: `{n} of {N} windows lit.` With no windows lit it reads `No windows lit yet.`
@@ -202,7 +205,8 @@ light.` when one remains); none lit `No windows lit yet.`
    goes dark. You can't undo this.`, buttons `Delete progress` (primary) and `Keep it` (secondary,
    focused first). Escape and `Keep it` close it and change nothing. Deleting closes it, clears
    progress, and says `Progress deleted.` in the status line. Focus returns to the button that
-   opened the dialog.
+   opened the dialog; after a delete that button is gone (nothing is lit any more), so focus goes to
+   the section's `h2` (`tabIndex={-1}`) and the status line announces `Progress deleted.`
 4. **Privacy**: `Hej saves your name, your progress and your colour choice in this browser only.
    Nothing is sent anywhere, and there are no accounts.`
 
@@ -384,8 +388,11 @@ component's class names come from StyleX.
   the note if nothing qualifies. On load only the known-voices check runs.
 - **Me and Not found design**: no preview; built from Home's parts as described under each page.
 - **Zero lit windows on Me**: `No windows lit yet.` and no delete button.
-- **Warning text**: `This browser can't save your progress. It will be lost when you reload or
-  close the page.`
+- **Warning text**: `This browser can't save your progress, name or colour choice. They will be lost
+  when you reload or close the page.` It covers all three because all three live in storage; the
+  name form's feedback says `for now` and the colour mode still applies at once.
+- **Focus after delete**: to the progress section's `h2`. **Control characters in a name**: refused
+  with the sentence under Me, Save disabled, `set_name` answers `ok: false`.
 - **How often**: every time Home or Me is shown while storage is not saving; not dismissible.
   CLAUDE.md says "on Home and Me" accordingly.
 - **Done live region**: the three strings given under Done.
