@@ -138,6 +138,23 @@ describe('webmcp', () => {
     expect(where()).toBe('/lesson/hej-og-tak/1')
   })
 
+  it('goes to the street, and to the first unlit entry or entry 1, from the done page', async () => {
+    seedProgress(['hej', 'goddag'])
+    const reg = installModelContext()
+    const first = renderAt('/lesson/hej-og-tak/done')
+    expect(await call(reg, 'go_from_done', { where: 'street' })).toEqual({ ok: true, page: 'home' })
+    expect(where()).toBe('/')
+    first.unmount()
+    const second = renderAt('/lesson/hej-og-tak/done')
+    expect(await call(reg, 'go_from_done', { where: 'light_the_rest' })).toEqual({ ok: true, page: 'lesson' })
+    expect(where()).toBe('/lesson/hej-og-tak/3')
+    second.unmount()
+    localStorage.clear()
+    renderAt('/lesson/hej-og-tak/done')
+    await call(reg, 'go_from_done', { where: 'light_the_rest' })
+    expect(where()).toBe('/lesson/hej-og-tak/1')
+  })
+
   it('answers the settings tools in their exact shapes', async () => {
     seedProgress(['hej', 'tak'])
     const reg = installModelContext()

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useLayoutEffect, useRef } from 'react'
 
 export type Answer = Record<string, unknown>
 
@@ -39,7 +39,9 @@ export function fail(error: string, extra: Answer = {}): Answer {
  */
 export function useWebMcp(tools: readonly Tool[]): void {
   const latest = useRef(tools)
-  latest.current = tools
+  useLayoutEffect(() => {
+    latest.current = tools
+  })
 
   useEffect(() => {
     const context = modelContext()

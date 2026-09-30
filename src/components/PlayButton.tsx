@@ -30,16 +30,17 @@ type Props = { da: string; status: SpeechStatus; disabled: boolean; onPress: () 
 /** Plays the Danish, or stops it. It sits on the seam between the two panes. */
 export function PlayButton({ da, status, disabled, onPress }: Props) {
   const busy = status !== 'idle'
+  const off = disabled && !busy // Stop stays live while a lookup or a speech runs
   return (
     <button
       type="button"
       aria-label={busy ? 'Stop' : `Hear ${da}`}
-      aria-disabled={disabled || undefined}
+      aria-disabled={off || undefined}
       aria-busy={status === 'lookup' || undefined}
       onClick={() => {
-        if (!disabled) onPress()
+        if (!off) onPress()
       }}
-      {...stylex.props(ui.focusable, styles.button, disabled && styles.off)}
+      {...stylex.props(ui.focusable, styles.button, off && styles.off)}
     >
       <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
         {busy ? <rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor" /> : <path d="M8 5 L19 12 L8 19 Z" fill="currentColor" />}

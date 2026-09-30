@@ -9,7 +9,7 @@ import { House, houseHeight } from './House'
 const HOUSE_WIDTH = 96
 
 const styles = stylex.create({
-  scroller: { overflowX: 'auto', scrollbarWidth: 'none' },
+  scroller: { overflowX: 'auto', scrollbarWidth: 'none', scrollSnapType: 'x proximity' },
   // At least as wide as the screen and as wide as every house: the strips run the whole street.
   street: { width: 'max-content', minWidth: '100%' },
   row: {
@@ -22,6 +22,7 @@ const styles = stylex.create({
   item: {
     boxSizing: 'border-box',
     flexShrink: 0,
+    scrollSnapAlign: 'start',
     width: HOUSE_WIDTH + 6,
     paddingInline: 3,
     display: 'flex',
@@ -102,11 +103,11 @@ export function Skyline({ lessons, progress }: { lessons: readonly Lesson[]; pro
           </ul>
           <div aria-hidden="true" {...stylex.props(styles.ground)} />
           <div aria-hidden="true" {...stylex.props(styles.water)} />
-          <ul aria-hidden="true" {...stylex.props(styles.row)}>
+          <ul {...stylex.props(styles.row)}>
             {lessons.map((lesson) => (
               <li key={lesson.id} {...stylex.props(styles.item)}>
                 <span lang="da" {...stylex.props(styles.title)}>{lesson.title}</span>
-                <span {...stylex.props(styles.count)}>
+                <span aria-hidden="true" {...stylex.props(styles.count)}>
                   {lit(lesson).size} of {lesson.entries.length}
                 </span>
               </li>
