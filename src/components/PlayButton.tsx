@@ -3,14 +3,20 @@ import { colors, radii } from '../styles/tokens.stylex'
 import { ui } from '../styles/ui'
 import type { SpeechStatus } from '../speech/useSpeech'
 
+const SIZE = 60
+const HALF = SIZE / 2
+
+/** How far the button reaches into the Danish pane (half its height) plus 6 px of air: that pane's bottom padding. */
+export const PLAY_OVERHANG = HALF + 6
+
 const styles = stylex.create({
   button: {
     position: 'absolute',
     right: 18,
-    bottom: -30,
+    bottom: -HALF,
     boxSizing: 'border-box',
-    width: 60,
-    height: 60,
+    width: SIZE,
+    height: SIZE,
     padding: 0,
     borderWidth: 0,
     borderRadius: radii.round,

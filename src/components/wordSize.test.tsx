@@ -1,6 +1,7 @@
 import { screen } from '@testing-library/react'
 import { renderAt, seedProgress, ENTRY_IDS, ENTRY_IDS_2 } from '../test/render'
 import { readText } from '../test/files'
+import { PLAY_OVERHANG } from './PlayButton'
 import { wordSize } from './wordSize'
 
 const TIERS = {
@@ -50,7 +51,22 @@ describe('word size', () => {
   it('anchors the play button to the bottom of the Danish pane, not to a pixel offset from the top', async () => {
     const source = await readText('src/components/PlayButton.tsx')
     expect(source).toMatch(/position: 'absolute'/)
-    expect(source).toMatch(/bottom: -30/)
+    expect(source).toMatch(/bottom: -HALF/)
     expect(source).not.toMatch(/\btop:/)
+  })
+
+  it('clears the play button: PLAY_OVERHANG is half its size plus 6, and only the Specimen pane pads by it', async () => {
+    const button = await readText('src/components/PlayButton.tsx')
+    expect(PLAY_OVERHANG).toBe(36)
+    expect(button).toMatch(/const SIZE = 60\nconst HALF = SIZE \/ 2/)
+    expect(button).toMatch(/export const PLAY_OVERHANG = HALF \+ 6/)
+    expect(button).toMatch(/width: SIZE,\s+height: SIZE/)
+    const specimen = await readText('src/components/Specimen.tsx')
+    expect(specimen).toMatch(/clearButton: \(paddingBottom: number\) => \(\{ paddingBottom \}\)/)
+    expect(specimen).toMatch(/styles\.clearButton\(PLAY_OVERHANG\)/)
+    expect(specimen).not.toMatch(/paddingBottom: \d/)
+    for (const file of ['components/SoundSection', 'pages/Sounds', 'pages/Home', 'pages/Done']) {
+      expect(await readText(`src/${file}.tsx`), file).not.toMatch(/PLAY_OVERHANG/)
+    }
   })
 })
