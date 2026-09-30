@@ -22,14 +22,56 @@ const EXPECTED_2 = [
   ['hyggeligt-at-moede', 'Hyggeligt at møde dig', 'Nice to meet you', 'HEW-guh-lid uh MUR-thuh dai', '[ˈhyɡəlid ʌ ˈmøːðə dɑj]', 'Nice to meet you. Hyggelig is the Danish word for cosy and friendly.'],
 ]
 
-const [lesson, lesson2] = lessons
+const EXPECTED_3 = [
+  ['en', 'En', 'One', 'ehn', '[ˈeˀn]', 'One. Before a noun Danes use en or et, depending on the noun.'],
+  ['to', 'To', 'Two', 'toe', '[ˈtoˀ]', 'Two. The voice catches at the end.'],
+  ['tre', 'Tre', 'Three', 'treh', '[ˈtʁɛˀ]', 'Three. The Danish r is made at the back of the throat.'],
+  ['fire', 'Fire', 'Four', 'FEE-uh', '[ˈfiːʌ]', 'Four. Two syllables.'],
+  ['fem', 'Fem', 'Five', 'fem', '[ˈfɛmˀ]', 'Five. The m has a small catch at the end.'],
+  ['seks', 'Seks', 'Six', 'sehgs', '[ˈsɛɡs]', 'Six. The k sounds like a g.'],
+  ['syv', 'Syv', 'Seven', 'sue', '[ˈsywˀ]', 'Seven. Say ee with your lips rounded, as if for oo.'],
+  ['otte', 'Otte', 'Eight', 'OH-duh', '[ˈɔːdə]', 'Eight. The tt sounds like a d.'],
+  ['ni', 'Ni', 'Nine', 'nee', '[ˈniˀ]', 'Nine. Like the English word knee.'],
+  ['ti', 'Ti', 'Ten', 'tee', '[ˈtiˀ]', 'Ten. Like the English word tea, with a catch at the end.'],
+]
+
+const EXPECTED_4 = [
+  ['vand', 'Vand', 'Water', 'van', '[ˈvanˀ]', 'Water. The first word to know in a café.'],
+  ['kaffe', 'Kaffe', 'Coffee', 'KAH-fuh', '[ˈkɑfə]', 'Coffee. Stress the first syllable.'],
+  ['te', 'Te', 'Tea', 'teh', '[ˈteˀ]', 'Tea. Short, with a small catch at the end.'],
+  ['maelk', 'Mælk', 'Milk', 'melg', '[ˈmɛlˀɡ]', 'Milk. The k at the end sounds like a g.'],
+  ['oel', 'Øl', 'Beer', 'url', '[ˈøl]', 'Beer. Say ur without the r.'],
+  ['broed', 'Brød', 'Bread', 'brurth', '[ˈbʁœðˀ]', 'Bread. The d is soft, like th in this.'],
+  ['smoer', 'Smør', 'Butter', 'smur', '[ˈsmɶɐ̯]', 'Butter. The ø glides into a soft r.'],
+  ['ost', 'Ost', 'Cheese', 'awst', '[ˈɔsd]', 'Cheese. The last t sounds like a d.'],
+  ['aeble', 'Æble', 'Apple', 'EH-bluh', '[ˈɛːblə]', 'Apple. The æ is like the e in bet, held a little longer.'],
+  ['suppe', 'Suppe', 'Soup', 'SAW-buh', '[ˈsɔbə]', 'Soup. The pp sounds like a b.'],
+]
+
+const EXPECTED_5 = [
+  ['by', 'By', 'City, town', 'bue', '[ˈbyˀ]', 'City, or town. Say ee with your lips rounded.'],
+  ['gade', 'Gade', 'Street', 'GEH-thuh', '[ˈɡæːðə]', 'Street. The d is soft, like th in this.'],
+  ['bus', 'Bus', 'Bus', 'boos', '[ˈbus]', 'Bus. Close to the English word, with a short oo.'],
+  ['tog', 'Tog', 'Train', 'taw', '[ˈtɔˀw]', 'Train. The g is not said; it glides into a w.'],
+  ['station', 'Station', 'Station', 'stah-SHOHN', '[sdaˈɕoˀn]', 'Station. The stress is on the last syllable, and ti sounds like sh.'],
+  ['butik', 'Butik', 'Shop', 'boo-TEEG', '[buˈtiɡ]', 'Shop. The k at the end sounds like a g.'],
+  ['hus', 'Hus', 'House', 'hoos', '[ˈhuˀs]', 'House. The voice catches after the u.'],
+  ['cykel', 'Cykel', 'Bicycle', 'SUE-gull', '[ˈsyɡəl]', 'Bicycle. The c is an s, and the y is ee with rounded lips.'],
+  ['bro', 'Bro', 'Bridge', 'broh', '[ˈbʁoˀ]', 'Bridge. The Danish r is made at the back of the throat.'],
+  ['torv', 'Torv', 'Square', 'tor', '[ˈtɒˀw]', 'Town square, or market square. The rv sounds like a w.'],
+]
+
+const [lesson, lesson2, lesson3, lesson4, lesson5] = lessons
 const table = (l: typeof lesson) => l.entries.map((e) => [e.id, e.da, e.en, e.respelling, e.ipa, e.note])
 
 describe('catalog', () => {
   it('has the lessons in order with their titles, colours and gables', () => {
-    expect(lessons.map((l) => l.id)).toEqual(['hej-og-tak', 'hvem-er-du'])
+    expect(lessons.map((l) => l.id)).toEqual(['hej-og-tak', 'hvem-er-du', 'tal', 'mad-og-drikke', 'byen'])
     expect(lesson).toMatchObject({ title: 'Hej og tak', titleEn: 'Hello and thanks', color: 'gul', gable: 'step' })
     expect(lesson2).toMatchObject({ title: 'Hvem er du?', titleEn: 'Who are you?', color: 'tegl', gable: 'point' })
+    expect(lesson3).toMatchObject({ title: 'Tal', titleEn: 'Numbers', color: 'hav', gable: 'bell' })
+    expect(lesson4).toMatchObject({ title: 'Mad og drikke', titleEn: 'Food and drink', color: 'salvie', gable: 'cornice' })
+    expect(lesson5).toMatchObject({ title: 'Byen', titleEn: 'The city', color: 'rosa', gable: 'step' })
     expect(getLesson('hvem-er-du')).toBe(lesson2)
     expect(getLesson('nope')).toBeUndefined()
     expect(PLANNED_LESSONS).toBe(5)
@@ -50,9 +92,18 @@ describe('catalog', () => {
     expect(table(lesson2)).toEqual(EXPECTED_2)
   })
 
+  it('has the ten entries of lessons 3, 4 and 5 in order, character for character', () => {
+    expect(table(lesson3)).toEqual(EXPECTED_3)
+    expect(table(lesson4)).toEqual(EXPECTED_4)
+    expect(table(lesson5)).toEqual(EXPECTED_5)
+  })
+
   it('has the praise words', () => {
     expect(lesson.praise).toEqual({ da: 'Velkommen', en: 'Welcome', respelling: 'VEL-kum-en', ipa: '[ˈvɛlˌkʌmˀən]' })
     expect(lesson2.praise).toEqual({ da: 'Flot', en: 'Well done', respelling: 'flut', ipa: '[ˈflʌd]' })
+    expect(lesson3.praise).toEqual({ da: 'Super', en: 'Great', respelling: 'SOO-buh', ipa: '[ˈsuˀbʌ]' })
+    expect(lesson4.praise).toEqual({ da: 'Velbekomme', en: 'Enjoy your meal', respelling: 'VEL-buh-KUM-uh', ipa: '[ˈvɛlbəˈkʌmˀə]' })
+    expect(lesson5.praise).toEqual({ da: 'Hyggeligt', en: 'Lovely', respelling: 'HEW-guh-lid', ipa: '[ˈhyɡəlid]' })
   })
 
   it('has entry ids unique across all lessons and no empty field', () => {

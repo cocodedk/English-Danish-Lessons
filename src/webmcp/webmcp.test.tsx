@@ -32,11 +32,14 @@ describe('webmcp', () => {
     const street = {
       name: null,
       windowsLit: 0,
-      windowsTotal: 16,
+      windowsTotal: 46,
       storage: 'saved',
       lessons: [
         { id: 'hej-og-tak', title: 'Hej og tak', titleEn: 'Hello and thanks', lit: 0, total: 8, done: false },
         { id: 'hvem-er-du', title: 'Hvem er du?', titleEn: 'Who are you?', lit: 0, total: 8, done: false },
+        { id: 'tal', title: 'Tal', titleEn: 'Numbers', lit: 0, total: 10, done: false },
+        { id: 'mad-og-drikke', title: 'Mad og drikke', titleEn: 'Food and drink', lit: 0, total: 10, done: false },
+        { id: 'byen', title: 'Byen', titleEn: 'The city', lit: 0, total: 10, done: false },
       ],
       next: { lessonId: 'hej-og-tak', position: 1, da: 'Hej', en: 'Hello' },
     }
@@ -72,7 +75,7 @@ describe('webmcp', () => {
       speaking: false,
     })
     expect(await call(reg, 'hear_entry')).toEqual({ ok: false, started: false, reason: 'unsupported' })
-    expect(await call(reg, 'mark_said')).toEqual({ ok: true, lit: true, windowsLit: 1, windowsTotal: 16 })
+    expect(await call(reg, 'mark_said')).toEqual({ ok: true, lit: true, windowsLit: 1, windowsTotal: 46 })
     expect((await call(reg, 'get_entry')).lit).toBe(true)
     expect(await call(reg, 'go_to', { where: 'next' })).toEqual({ ok: true, page: 'lesson', position: 2 })
     expect(where()).toBe('/lesson/hej-og-tak/2')
@@ -153,7 +156,7 @@ describe('webmcp', () => {
       name: null,
       colorMode: 'auto',
       windowsLit: 2,
-      windowsTotal: 16,
+      windowsTotal: 46,
       storage: 'saved',
     })
     expect(await call(reg, 'set_name', { name: '  Sam ' })).toEqual({ ok: true, name: 'Sam' })

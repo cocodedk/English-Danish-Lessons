@@ -1,7 +1,7 @@
 import { screen, within } from '@testing-library/react'
 import { getLesson } from '../catalog'
 import { resetStorage } from '../storage/core'
-import { ENTRY_IDS, ENTRY_IDS_2, LESSON, LESSON_2, renderAt, seedName, seedProgress } from '../test/render'
+import { ALL_LIT, ENTRY_IDS, ENTRY_IDS_2, LESSON, LESSON_2, renderAt, seedName, seedProgress } from '../test/render'
 import { byContent } from '../test/text'
 
 const entries = getLesson('hej-og-tak')!.entries
@@ -28,7 +28,8 @@ describe('home', () => {
       [{ [LESSON]: ['hej', 'tak', 'ja'] }, '3 windows lit on your street.'],
       [{ [LESSON]: ENTRY_IDS }, '8 windows lit on your street.'],
       [{ [LESSON]: ENTRY_IDS, [LESSON_2]: ['jeg'] }, '9 windows lit on your street.'],
-      [{ [LESSON]: ENTRY_IDS, [LESSON_2]: ENTRY_IDS_2 }, 'Every window is lit on your street.'],
+      [{ [LESSON]: ENTRY_IDS, [LESSON_2]: ENTRY_IDS_2 }, '16 windows lit on your street.'],
+      [ALL_LIT, 'Every window is lit on your street.'],
     ]
     for (const [lit, line] of cases) {
       seedProgress([], lit)
@@ -55,7 +56,7 @@ describe('home', () => {
   })
 
   it('says every lesson is done, and practises the first lesson', () => {
-    seedProgress([], { [LESSON]: ENTRY_IDS, [LESSON_2]: ENTRY_IDS_2 })
+    seedProgress([], ALL_LIT)
     const { container } = renderAt('/')
     expect(byContent('Every lesson is done')).toBeInTheDocument()
     expect(card().getByText('Hej og tak')).toHaveAttribute('lang', 'da')
@@ -103,7 +104,7 @@ describe('home', () => {
     }
   })
 
-  it('draws both houses from storage, names their links and keeps the plot', () => {
+  it('draws the houses from storage, names their links and has no plot', () => {
     seedProgress(['hej', 'tak'], { [LESSON]: ['hej', 'tak'], [LESSON_2]: ['jeg'] })
     const { container } = renderAt('/')
     const link = screen.getByRole('link', { name: 'Hej og tak, 2 of 8 windows lit' })
@@ -115,9 +116,9 @@ describe('home', () => {
     expect(second.querySelector('[data-house]')).toHaveAttribute('data-house', 'tegl')
     expect(second.querySelector('[data-gable]')).toHaveAttribute('data-gable', 'point')
     expect(container.textContent).toContain('Your street')
-    expect(container.textContent).toContain('2 lessons')
-    expect(container.textContent).toContain('Coming next')
-    expect(container.querySelector('[data-plot]')).not.toBeNull()
+    expect(container.textContent).toContain('5 lessons')
+    expect(container.textContent).not.toContain('Coming next')
+    expect(container.querySelector('[data-plot]')).toBeNull()
   })
 
   it('offers Add your name only without a name', () => {

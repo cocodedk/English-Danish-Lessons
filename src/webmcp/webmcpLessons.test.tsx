@@ -1,9 +1,9 @@
 // The WebMCP tools with more than one lesson in the catalog.
 import { call, where } from '../test/mcpCalls'
-import { ENTRY_IDS, ENTRY_IDS_2, renderAt, seedName, seedProgress } from '../test/render'
+import { ALL_LIT, ENTRY_IDS, ENTRY_IDS_2, renderAt, seedName, seedProgress } from '../test/render'
 import { installModelContext } from '../test/webmcp'
 
-describe('webmcp with two lessons', () => {
+describe('webmcp with five lessons', () => {
   it('points next at lesson 2 when lesson 1 is lit, and at nothing when every window is lit', async () => {
     seedProgress(ENTRY_IDS)
     seedName('Sam')
@@ -11,16 +11,22 @@ describe('webmcp with two lessons', () => {
     const first = renderAt('/')
     expect(await call(reg, 'get_street')).toMatchObject({
       windowsLit: 8,
-      lessons: [{ lit: 8, total: 8, done: true }, { id: 'hvem-er-du', lit: 0, total: 8, done: false }],
+      lessons: [
+        { lit: 8, total: 8, done: true },
+        { id: 'hvem-er-du', lit: 0, total: 8, done: false },
+        { id: 'tal', lit: 0, total: 10, done: false },
+        { id: 'mad-og-drikke', lit: 0, total: 10, done: false },
+        { id: 'byen', lit: 0, total: 10, done: false },
+      ],
       next: { lessonId: 'hvem-er-du', position: 1, da: 'Jeg', en: 'I' },
     })
     first.unmount()
-    seedProgress([], { 'hej-og-tak': ENTRY_IDS, 'hvem-er-du': ENTRY_IDS_2 })
+    seedProgress([], ALL_LIT)
     renderAt('/')
     expect(await call(reg, 'get_street')).toMatchObject({
       name: 'Sam',
-      windowsLit: 16,
-      lessons: [{ lit: 8, total: 8, done: true }, { lit: 8, total: 8, done: true }],
+      windowsLit: 46,
+      lessons: [8, 8, 10, 10, 10].map((total) => ({ lit: total, total, done: true })),
       next: null,
     })
   })
@@ -39,7 +45,7 @@ describe('webmcp with two lessons', () => {
     renderAt('/')
     expect(await call(reg, 'open_lesson', { lessonId: 'nope' })).toMatchObject({
       ok: false,
-      lessonIds: ['hej-og-tak', 'hvem-er-du'],
+      lessonIds: ['hej-og-tak', 'hvem-er-du', 'tal', 'mad-og-drikke', 'byen'],
     })
   })
 
