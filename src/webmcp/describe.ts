@@ -13,7 +13,7 @@ export const PAGE_TOOLS: Record<PageKind, string[]> = {
 }
 
 const SUMMARIES: Record<PageKind, string> = {
-  home: 'Your street: the Hej og tak house with its lit windows, and a card that continues the lesson.',
+  home: 'Your street: one house per lesson with its lit windows, and a card that continues the next lesson.',
   lesson: 'One Danish entry to hear and say, with a button to light its window.',
   done: 'The result of the lesson: how many windows are lit, and where to go next.',
   me: 'Your name, colour mode and progress, all kept in this browser.',

@@ -30,6 +30,7 @@ export const colors = stylex.defineVars({
 export const fonts = stylex.defineVars({
   display: "'Bricolage Grotesque Variable', system-ui, sans-serif",
   body: "'Atkinson Hyperlegible Next Variable', system-ui, sans-serif",
+  ipa: "'Noto Sans Variable', system-ui, sans-serif",
 })
 
 export const space = stylex.defineVars({

@@ -50,7 +50,7 @@ function announcement(lit: number, total: number, praise: string): string {
 /** Validates the lesson first, so the result page itself only ever sees a real lesson. */
 export function DoneRoute() {
   const lesson = getLesson(useParams().lessonId)
-  return lesson ? <Done lesson={lesson} /> : <NotFound />
+  return lesson ? <Done key={lesson.id} lesson={lesson} /> : <NotFound />
 }
 
 function Done({ lesson }: { lesson: Lesson }) {
@@ -105,7 +105,7 @@ function Done({ lesson }: { lesson: Lesson }) {
             <h1 tabIndex={-1} {...stylex.props(ui.h1)}>{`${lit} of ${total} windows lit`}</h1>
             <p {...stylex.props(ui.body)}>
               {lit === 0
-                ? <>Start with <span lang="da">Hej</span> and light your first window.</>
+                ? <>Start with <span lang="da">{lesson.entries[0].da}</span> and light your first window.</>
                 : 'Go back to the entries you skipped to light the rest.'}
             </p>
             {house}

@@ -112,7 +112,7 @@ describe('me', () => {
   it('opens the dialog with Keep it focused, and Keep it and Escape change nothing', () => {
     seedProgress(['hej', 'goddag', 'tak'])
     renderAt('/me')
-    expect(progressCard().getByText('3 of 8 windows lit.')).toBeInTheDocument()
+    expect(progressCard().getByText('3 of 16 windows lit.')).toBeInTheDocument()
     expect(dialog()).not.toHaveAttribute('open')
     fireEvent.click(opener())
     expect(dialog()).toHaveAttribute('open')

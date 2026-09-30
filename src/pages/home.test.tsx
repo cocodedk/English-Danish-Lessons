@@ -1,7 +1,7 @@
 import { screen, within } from '@testing-library/react'
 import { getLesson } from '../catalog'
 import { resetStorage } from '../storage/core'
-import { ENTRY_IDS, renderAt, seedName, seedProgress } from '../test/render'
+import { ENTRY_IDS, ENTRY_IDS_2, LESSON, LESSON_2, renderAt, seedName, seedProgress } from '../test/render'
 import { byContent } from '../test/text'
 
 const entries = getLesson('hej-og-tak')!.entries
@@ -22,21 +22,49 @@ describe('home', () => {
   })
 
   it('says how many windows are lit', () => {
-    const cases: [string[], string][] = [
-      [[], 'Your street is waiting. Start with Hej og tak.'],
-      [['hej'], '1 window lit on your street.'],
-      [['hej', 'tak', 'ja'], '3 windows lit on your street.'],
-      [ENTRY_IDS, 'Every window is lit on your street.'],
+    const cases: [Record<string, string[]>, string][] = [
+      [{}, 'Your street is waiting. Start with Hej og tak.'],
+      [{ [LESSON]: ['hej'] }, '1 window lit on your street.'],
+      [{ [LESSON]: ['hej', 'tak', 'ja'] }, '3 windows lit on your street.'],
+      [{ [LESSON]: ENTRY_IDS }, '8 windows lit on your street.'],
+      [{ [LESSON]: ENTRY_IDS, [LESSON_2]: ['jeg'] }, '9 windows lit on your street.'],
+      [{ [LESSON]: ENTRY_IDS, [LESSON_2]: ENTRY_IDS_2 }, 'Every window is lit on your street.'],
     ]
-    for (const [ids, line] of cases) {
-      seedProgress(ids)
+    for (const [lit, line] of cases) {
+      seedProgress([], lit)
       const { unmount } = renderAt('/')
       expect(byContent(line)).toBeInTheDocument()
       unmount()
     }
   })
 
-  it('shows the continue card for none lit, some lit and all lit', () => {
+  it('continues the first lesson with an unlit entry', () => {
+    const cases: [Record<string, string[]>, string, string, string, string][] = [
+      [{ [LESSON]: ENTRY_IDS }, 'Start Hvem er du?', 'Jeg', 'Start', '/lesson/hvem-er-du/1'],
+      [{ [LESSON]: ENTRY_IDS, [LESSON_2]: ['jeg', 'du'] }, 'Next in Hvem er du?', 'Hvad hedder du?', 'Continue', '/lesson/hvem-er-du/3'],
+      [{ [LESSON_2]: ENTRY_IDS_2 }, 'Start Hej og tak', 'Hej', 'Start', '/lesson/hej-og-tak/1'],
+    ]
+    for (const [lit, label, word, button, href] of cases) {
+      seedProgress([], lit)
+      const { unmount } = renderAt('/')
+      expect(byContent(label)).toBeInTheDocument()
+      expect(card().getByText(word)).toHaveAttribute('lang', 'da')
+      expect(card().getByRole('link', { name: button })).toHaveAttribute('href', href)
+      unmount()
+    }
+  })
+
+  it('says every lesson is done, and practises the first lesson', () => {
+    seedProgress([], { [LESSON]: ENTRY_IDS, [LESSON_2]: ENTRY_IDS_2 })
+    const { container } = renderAt('/')
+    expect(byContent('Every lesson is done')).toBeInTheDocument()
+    expect(card().getByText('Hej og tak')).toHaveAttribute('lang', 'da')
+    expect(card().getByText('Start again from the beginning.')).toBeInTheDocument()
+    expect(card().getByRole('link', { name: 'Practise' })).toHaveAttribute('href', '/lesson/hej-og-tak/1')
+    expect(container.textContent).not.toContain('Sounds like')
+  })
+
+  it('shows the continue card for none lit and some lit', () => {
     let view = renderAt('/')
     expect(byContent('Start Hej og tak')).toBeInTheDocument()
     expect(byContent('Start Hej og tak').querySelector('[lang="da"]')).toHaveTextContent('Hej og tak')
@@ -53,14 +81,6 @@ describe('home', () => {
     expect(view.container.textContent).toContain(sounds(2))
     expect(card().getByText('Thanks')).toBeInTheDocument()
     expect(card().getByRole('link', { name: 'Continue' })).toHaveAttribute('href', '/lesson/hej-og-tak/3')
-    view.unmount()
-
-    seedProgress(ENTRY_IDS)
-    view = renderAt('/')
-    expect(byContent('Hej og tak is done')).toBeInTheDocument()
-    expect(card().getByText('Say it all again')).toBeInTheDocument()
-    expect(card().getByRole('link', { name: 'Practise' })).toHaveAttribute('href', '/lesson/hej-og-tak/1')
-    expect(view.container.textContent).not.toContain('Sounds like')
   })
 
   it('shows the main nav on Home, Me and Not found, and not on the lesson or done pages', () => {
@@ -83,16 +103,21 @@ describe('home', () => {
     }
   })
 
-  it('draws the lit windows from storage and names the house link', () => {
-    seedProgress(['hej', 'tak'])
+  it('draws both houses from storage, names their links and keeps the plot', () => {
+    seedProgress(['hej', 'tak'], { [LESSON]: ['hej', 'tak'], [LESSON_2]: ['jeg'] })
     const { container } = renderAt('/')
     const link = screen.getByRole('link', { name: 'Hej og tak, 2 of 8 windows lit' })
     expect(link).toHaveAttribute('href', '/lesson/hej-og-tak')
     expect(link.querySelectorAll('g[data-lit="true"]')).toHaveLength(2)
     expect(link.querySelectorAll('g[data-lit="false"]')).toHaveLength(6)
+    const second = screen.getByRole('link', { name: 'Hvem er du?, 1 of 8 windows lit' })
+    expect(second).toHaveAttribute('href', '/lesson/hvem-er-du')
+    expect(second.querySelector('[data-house]')).toHaveAttribute('data-house', 'tegl')
+    expect(second.querySelector('[data-gable]')).toHaveAttribute('data-gable', 'point')
     expect(container.textContent).toContain('Your street')
-    expect(container.textContent).toContain('1 lesson')
+    expect(container.textContent).toContain('2 lessons')
     expect(container.textContent).toContain('Coming next')
+    expect(container.querySelector('[data-plot]')).not.toBeNull()
   })
 
   it('offers Add your name only without a name', () => {
