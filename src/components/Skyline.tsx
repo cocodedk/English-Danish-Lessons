@@ -1,6 +1,6 @@
 import * as stylex from '@stylexjs/stylex'
 import { Link } from 'react-router-dom'
-import type { Lesson } from '../catalog'
+import { PLANNED_LESSONS, type Lesson } from '../catalog'
 import { litIds, type Progress } from '../storage/stores'
 import { colors, space } from '../styles/tokens.stylex'
 import { ui } from '../styles/ui'
@@ -68,6 +68,7 @@ export function Skyline({ lessons, progress }: { lessons: readonly Lesson[]; pro
     const ids = litIds(progress, lesson.id)
     return new Set(lesson.entries.flatMap((e, i) => (ids.includes(e.id) ? [i] : [])))
   }
+  const showPlot = lessons.length < PLANNED_LESSONS
   return (
     <section aria-labelledby="street-caption">
       <div {...stylex.props(styles.caption, ui.caption)}>
@@ -97,9 +98,11 @@ export function Skyline({ lessons, progress }: { lessons: readonly Lesson[]; pro
                 </li>
               )
             })}
-            <li aria-hidden="true" {...stylex.props(styles.item)}>
-              <div {...stylex.props(styles.plot)} style={{ height: houseHeight(lessons[0]?.entries.length ?? 8) }} />
-            </li>
+            {showPlot && (
+              <li aria-hidden="true" {...stylex.props(styles.item)}>
+                <div data-plot {...stylex.props(styles.plot)} style={{ height: houseHeight(lessons[lessons.length - 1].entries.length) }} />
+              </li>
+            )}
           </ul>
           <div aria-hidden="true" {...stylex.props(styles.ground)} />
           <div aria-hidden="true" {...stylex.props(styles.water)} />
@@ -112,9 +115,11 @@ export function Skyline({ lessons, progress }: { lessons: readonly Lesson[]; pro
                 </span>
               </li>
             ))}
-            <li {...stylex.props(styles.item)}>
-              <span {...stylex.props(styles.count, styles.title)}>Coming next</span>
-            </li>
+            {showPlot && (
+              <li {...stylex.props(styles.item)}>
+                <span {...stylex.props(styles.count, styles.title)}>Coming next</span>
+              </li>
+            )}
           </ul>
         </div>
       </div>

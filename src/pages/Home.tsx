@@ -6,9 +6,10 @@ import { Pronunciation } from '../components/Pronunciation'
 import { Skyline } from '../components/Skyline'
 import { StorageNote } from '../components/StorageNote'
 import { TopBar } from '../components/TopBar'
+import { wordSize } from '../components/wordSize'
 import { HOME_TITLE, usePage } from '../pageHooks'
 import { useProfile, useProgress } from '../storage/hooks'
-import { countLit, firstUnlit } from '../storage/stores'
+import { countLit, firstUnlit, litIds } from '../storage/stores'
 import { fonts, space } from '../styles/tokens.stylex'
 import { buttonProps, ui } from '../styles/ui'
 import { homeTools } from '../webmcp/homeTools'
@@ -17,14 +18,16 @@ import { useWebMcp } from '../webmcp/helper'
 const styles = stylex.create({
   section: { marginTop: space.s24 },
   cardTop: { display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: space.s12 },
-  word: {
+  word: (fontSize: number) => ({
     margin: 0,
     fontFamily: fonts.display,
-    fontSize: 44,
+    fontSize,
     lineHeight: 1,
     fontWeight: 800,
     letterSpacing: '-0.03em',
-  },
+    maxWidth: '100%',
+    overflowWrap: 'break-word',
+  }),
   label: { margin: 0, fontSize: 15, fontWeight: 600 },
   english: { margin: 0, marginTop: space.s4 },
   addName: { marginTop: space.s8 },
@@ -44,31 +47,32 @@ export function Home() {
   usePage('home', HOME_TITLE)
   useWebMcp(homeTools((to) => navigate(to)))
 
-  const lit = countLit(progress)
-  const total = totalEntries()
-  const lesson = lessons[0]
-  const unlit = firstUnlit(progress, lesson.id)
+  const first = lessons[0]
+  // The subject lesson is the first one with an unlit entry.
+  const subject = lessons.find((l) => firstUnlit(progress, l.id))
+  const unlit = subject && firstUnlit(progress, subject.id)
+  const started = subject !== undefined && litIds(progress, subject.id).length > 0
 
   return (
     <div {...stylex.props(ui.shell)}>
       <TopBar nav current="street" />
       <main {...stylex.props(ui.content)}>
         <h1 tabIndex={-1} {...stylex.props(ui.h1)}>{name === '' ? 'Hej.' : `Hej, ${name}.`}</h1>
-        <p {...stylex.props(ui.body)}>{windowsLine(lit, total, lesson.title)}</p>
+        <p {...stylex.props(ui.body)}>{windowsLine(countLit(progress), totalEntries(), first.title)}</p>
         <StorageNote />
         <div {...stylex.props(styles.section)}>
           <Skyline lessons={lessons} progress={progress} />
         </div>
         <section aria-label="Continue" {...stylex.props(ui.card, styles.section)}>
-          {unlit ? (
+          {subject && unlit ? (
             <>
               <p {...stylex.props(styles.label)}>
-                {lit === 0 ? 'Start ' : 'Next in '}<span lang="da">{lesson.title}</span>
+                {started ? 'Next in ' : 'Start '}<span lang="da">{subject.title}</span>
               </p>
               <div {...stylex.props(styles.cardTop)}>
-                <p lang="da" {...stylex.props(styles.word)}>{unlit.entry.da}</p>
-                <Link to={`/lesson/${lesson.id}/${unlit.position}`} {...buttonProps('primary')}>
-                  {lit === 0 ? 'Start' : 'Continue'}
+                <p lang="da" {...stylex.props(styles.word(wordSize(unlit.entry.da).card))}>{unlit.entry.da}</p>
+                <Link to={`/lesson/${subject.id}/${unlit.position}`} {...buttonProps('primary')}>
+                  {started ? 'Continue' : 'Start'}
                 </Link>
               </div>
               <Pronunciation respelling={unlit.entry.respelling} ipa={unlit.entry.ipa} small />
@@ -76,12 +80,12 @@ export function Home() {
             </>
           ) : (
             <>
-              <p {...stylex.props(styles.label)}><span lang="da">{lesson.title}</span> is done</p>
+              <p {...stylex.props(styles.label)}>Every lesson is done</p>
               <div {...stylex.props(styles.cardTop)}>
-                <p lang="da" {...stylex.props(styles.word)}>{lesson.title}</p>
-                <Link to={`/lesson/${lesson.id}/1`} {...buttonProps('primary')}>Practise</Link>
+                <p lang="da" {...stylex.props(styles.word(wordSize(first.title).card))}>{first.title}</p>
+                <Link to={`/lesson/${first.id}/1`} {...buttonProps('primary')}>Practise</Link>
               </div>
-              <p {...stylex.props(ui.body, styles.english)}>Say it all again</p>
+              <p {...stylex.props(ui.body, styles.english)}>Start again from the beginning.</p>
             </>
           )}
         </section>

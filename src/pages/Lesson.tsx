@@ -3,8 +3,7 @@ import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { getLesson, type Entry, type Lesson as LessonData } from '../catalog'
 import { Lamp } from '../components/Lamp'
-import { PlayButton } from '../components/PlayButton'
-import { Pronunciation } from '../components/Pronunciation'
+import { Specimen } from '../components/Specimen'
 import { APP_NAME } from '../constants'
 import { usePage } from '../pageHooks'
 import { useSpeech } from '../speech/useSpeech'
@@ -15,14 +14,6 @@ import { buttonProps, ui } from '../styles/ui'
 import { useWebMcp } from '../webmcp/helper'
 import { lessonTools } from '../webmcp/lessonTools'
 import { NotFound } from './NotFound'
-
-const facade = stylex.create({
-  gul: { backgroundColor: colors.gul, color: colors.onGul },
-  tegl: { backgroundColor: colors.tegl, color: colors.onTegl },
-  hav: { backgroundColor: colors.hav, color: colors.onHav },
-  salvie: { backgroundColor: colors.salvie, color: colors.onSalvie },
-  rosa: { backgroundColor: colors.rosa, color: colors.onRosa },
-})
 
 const styles = stylex.create({
   bar: {
@@ -49,24 +40,6 @@ const styles = stylex.create({
     fontSize: 26,
   },
   barLabel: { fontSize: 15, fontWeight: 600, color: colors.inkSoft },
-  seam: { position: 'relative' },
-  danish: {
-    boxSizing: 'border-box',
-    minHeight: 170,
-    paddingTop: 44,
-    paddingBottom: 20,
-    paddingInline: 22,
-    clipPath:
-      'polygon(0 26px, 14% 26px, 14% 17px, 28% 17px, 28% 8px, 44% 8px, 44% 0, 56% 0, 56% 8px, 72% 8px, 72% 17px, 86% 17px, 86% 26px, 100% 26px, 100% 100%, 0 100%)',
-  },
-  word: {
-    margin: 0,
-    fontFamily: fonts.display,
-    fontSize: 'clamp(72px, 22vw, 96px)',
-    lineHeight: 0.95,
-    fontWeight: 800,
-    letterSpacing: '-0.035em',
-  },
   english: {
     backgroundColor: colors.paper,
     borderBottomLeftRadius: radii.card,
@@ -77,14 +50,10 @@ const styles = stylex.create({
   },
   meaning: { margin: 0, fontFamily: fonts.display, fontSize: 26, lineHeight: 1.15, fontWeight: 600, letterSpacing: '-0.01em' },
   note: { margin: 0, marginTop: space.s8 },
-  small: { marginTop: space.s8 },
   actions: { display: 'flex', flexDirection: 'column', gap: space.s12, alignItems: 'stretch' },
   footer: { display: 'flex', gap: space.s12, marginTop: space.s20 },
   grow: { flexGrow: 1 },
 })
-
-const NO_VOICE = 'This device has no Danish voice, so there is no sound. Use the sound guide above.'
-const NO_SPEECH = "This browser can't play sound. Use the sound guide above."
 
 /** Validates the address first, so the entry page itself only ever sees a real entry. */
 export function LessonRoute() {
@@ -138,17 +107,7 @@ function LessonEntry({ lesson, position }: { lesson: LessonData; position: numbe
         </span>
       </div>
       <main {...stylex.props(ui.contentFocused)}>
-        <div {...stylex.props(styles.seam)}>
-          <div {...stylex.props(styles.danish, facade[lesson.color])}>
-            <h1 tabIndex={-1} lang="da" {...stylex.props(styles.word)}>{entry.da}</h1>
-            <Pronunciation respelling={entry.respelling} ipa={entry.ipa} />
-            {speech.noVoice && (
-              <p role="note" {...stylex.props(styles.small)}>{speech.supported ? NO_VOICE : NO_SPEECH}</p>
-            )}
-            {speech.failed && <p role="status" {...stylex.props(styles.small)}>The sound didn&apos;t play. Try again.</p>}
-          </div>
-          <PlayButton da={entry.da} status={speech.status} disabled={speech.noVoice} onPress={speech.press} />
-        </div>
+        <Specimen entry={entry} color={lesson.color} speech={speech} />
         <div {...stylex.props(styles.english)}>
           <p lang="en" {...stylex.props(styles.meaning)}>{entry.en}</p>
           <p {...stylex.props(ui.body, styles.note)}>{entry.note}</p>

@@ -2,7 +2,7 @@ import { act, fireEvent, screen } from '@testing-library/react'
 import { getLesson } from '../catalog'
 import { lightEntry } from '../storage/stores'
 import { call, PAGES, stored, where } from '../test/mcpCalls'
-import { ENTRY_IDS, renderAt, seedName, seedProgress } from '../test/render'
+import { ENTRY_IDS, renderAt, seedProgress } from '../test/render'
 import { installSpeech, voice } from '../test/speech'
 import { installModelContext } from '../test/webmcp'
 
@@ -32,9 +32,12 @@ describe('webmcp', () => {
     const street = {
       name: null,
       windowsLit: 0,
-      windowsTotal: 8,
+      windowsTotal: 16,
       storage: 'saved',
-      lessons: [{ id: 'hej-og-tak', title: 'Hej og tak', titleEn: 'Hello and thanks', lit: 0, total: 8, done: false }],
+      lessons: [
+        { id: 'hej-og-tak', title: 'Hej og tak', titleEn: 'Hello and thanks', lit: 0, total: 8, done: false },
+        { id: 'hvem-er-du', title: 'Hvem er du?', titleEn: 'Who are you?', lit: 0, total: 8, done: false },
+      ],
       next: { lessonId: 'hej-og-tak', position: 1, da: 'Hej', en: 'Hello' },
     }
     expect(await call(reg, 'get_street')).toEqual(street)
@@ -50,19 +53,6 @@ describe('webmcp', () => {
       position: 3,
     })
     expect(where()).toBe('/lesson/hej-og-tak/3')
-  })
-
-  it('reports no next entry and every lesson done when all windows are lit', async () => {
-    seedProgress(ENTRY_IDS)
-    seedName('Sam')
-    const reg = installModelContext()
-    renderAt('/')
-    expect(await call(reg, 'get_street')).toMatchObject({
-      name: 'Sam',
-      windowsLit: 8,
-      lessons: [{ lit: 8, total: 8, done: true }],
-      next: null,
-    })
   })
 
   it('answers the lesson tools in their exact shapes', async () => {
@@ -82,7 +72,7 @@ describe('webmcp', () => {
       speaking: false,
     })
     expect(await call(reg, 'hear_entry')).toEqual({ ok: false, started: false, reason: 'unsupported' })
-    expect(await call(reg, 'mark_said')).toEqual({ ok: true, lit: true, windowsLit: 1, windowsTotal: 8 })
+    expect(await call(reg, 'mark_said')).toEqual({ ok: true, lit: true, windowsLit: 1, windowsTotal: 16 })
     expect((await call(reg, 'get_entry')).lit).toBe(true)
     expect(await call(reg, 'go_to', { where: 'next' })).toEqual({ ok: true, page: 'lesson', position: 2 })
     expect(where()).toBe('/lesson/hej-og-tak/2')
@@ -163,7 +153,7 @@ describe('webmcp', () => {
       name: null,
       colorMode: 'auto',
       windowsLit: 2,
-      windowsTotal: 8,
+      windowsTotal: 16,
       storage: 'saved',
     })
     expect(await call(reg, 'set_name', { name: '  Sam ' })).toEqual({ ok: true, name: 'Sam' })

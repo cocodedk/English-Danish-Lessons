@@ -1,6 +1,8 @@
-import { screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
+import { MemoryRouter, useNavigate } from 'react-router-dom'
 import { getLesson } from '../catalog'
-import { ENTRY_IDS, renderAt, seedProgress } from '../test/render'
+import { AppRoutes } from '../routes'
+import { ENTRY_IDS, ENTRY_IDS_2, renderAt, seedProgress } from '../test/render'
 import { byContent } from '../test/text'
 
 const praise = getLesson('hej-og-tak')!.praise
@@ -44,6 +46,24 @@ describe('done', () => {
     expect(byContent('Start with Hej and light your first window.')).toBeInTheDocument()
     expect(container.querySelector('[data-bunting]')).toBeNull()
     expect(screen.getByRole('link', { name: 'Start the lesson' })).toHaveAttribute('href', '/lesson/hej-og-tak/1')
+  })
+
+  it('announces the lesson on screen when the address changes from one done page to another', () => {
+    seedProgress([], { 'hej-og-tak': ENTRY_IDS, 'hvem-er-du': ENTRY_IDS_2 })
+    const Jump = () => {
+      const go = useNavigate()
+      return <button onClick={() => go('/lesson/hvem-er-du/done')}>jump</button>
+    }
+    render(
+      <MemoryRouter initialEntries={[DONE]}>
+        <AppRoutes />
+        <Jump />
+      </MemoryRouter>,
+    )
+    expect(status()).toHaveTextContent('All 8 windows lit. Velkommen!')
+    fireEvent.click(screen.getByRole('button', { name: 'jump' }))
+    expect(h1()).toHaveTextContent('Flot')
+    expect(status()).toHaveTextContent('All 8 windows lit. Flot!')
   })
 
   it('says exactly how many are left when one remains', () => {
