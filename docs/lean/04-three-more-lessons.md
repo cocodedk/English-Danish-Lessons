@@ -74,7 +74,7 @@ Title `Byen`, English title `The city`, colour `rosa`, gable `step`, ten entries
 Sources, checked 2026-09-30 on ordnet.dk (DDO), one entry per word, in DDO's notation with `g`→`ɡ`
 and `ε`→`ɛ`; `Hyggeligt` adds the neuter `d` to DDO's `hyggelig` `[ˈhygəli]`, and
 `Velbekomme` keeps DDO's two stress marks. List all 30 entries and the three praise words in the
-pull request description under "Danish for review", marking the two derived ones.
+pull request description under "Danish for review", marking the one derived entry, `Hyggeligt`.
 
 ## Behaviour
 
@@ -106,6 +106,9 @@ The tests prove, at least:
 
 ## Answers to the grill
 
+- **Derived entries**: only `Hyggeligt` (the praise of lesson 5) is derived; `Velbekomme` is DDO's
+  transcription kept as is, with its two stress marks. The earlier "two derived ones" was a slip.
+- **Wiktionary** was not consulted for these lessons; DDO is the required source (CLAUDE.md).
 - The builder copies the strings and never edits them; an apparent mistake goes in the pull
   request description, not in the data.
 - The respellings are hand-made English-reader guides and are not meant to be consistent beyond
