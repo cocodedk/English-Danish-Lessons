@@ -1,3 +1,7 @@
+---
+lean_status: stopped
+lean_worktree: /tmp/graph-bostmis7/task-01-hej-og-tak
+---
 # Spec 01: Hej og tak, the first lesson, end to end
 
 ## Goal
@@ -368,6 +372,10 @@ component's class names come from StyleX.
   list), because lesson 2 is only data.
 - The name of the app in the UI is `Hej`, from one constant. The path `/English-Danish-Lessons/`
   appears only in `vite.config.ts` and the workflows.
+- Tests that read `tokens.css`, `index.html`, `llms.txt` or `dist/` read them from disk with
+  `node:fs` and a path relative to the project root (Vitest runs from the root). Do not build
+  paths with `new URL(…, import.meta.url)` in a template string: Vite rewrites it and the path
+  becomes `undefined`. `@types/node` is a dev dependency you may add for these test files only.
 - jsdom has no `<dialog>.showModal`; stub it in `src/test/setup.ts` if needed. It also has no
   `matchMedia`, `speechSynthesis` or layout; the setup file provides the stubs the tests use.
 - StyleX notes: dynamic per-lesson colours use a static map keyed by the colour name, not runtime
