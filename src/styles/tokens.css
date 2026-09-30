@@ -1,0 +1,89 @@
+/* The only file with colour values. Names and values match docs/design/ART-DIRECTION.md. */
+html,
+body {
+  margin: 0;
+  background: var(--sky);
+}
+
+:root {
+  color-scheme: light;
+  --sky: #E5ECF1;
+  --paper: #F8FAFB;
+  --ink: #14233B;
+  --ink-soft: #485A72;
+  --line: #C3CFD9;
+  --edge: #6A7F96;
+  --fjord: #1D4E85;
+  --on-fjord: #F8FAFB;
+  --lamp: #F4B63A;
+  --window-off: #33465F;
+  --window-frame: #F8FAFB;
+  --ground: #14233B;
+  --flag: #C8102E;
+  --gul: #EBB94A;
+  --on-gul: #14233B;
+  --tegl: #A5402D;
+  --on-tegl: #F8FAFB;
+  --hav: #2E7291;
+  --on-hav: #F8FAFB;
+  --salvie: #93B08C;
+  --on-salvie: #14233B;
+  --rosa: #DA9C9A;
+  --on-rosa: #14233B;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --sky: #0B1730;
+  --paper: #13223D;
+  --ink: #EDF2F7;
+  --ink-soft: #A9B8CB;
+  --line: #2A3B58;
+  --edge: #61789A;
+  --fjord: #8DB8EE;
+  --on-fjord: #0B1730;
+  --lamp: #FFC65A;
+  --window-off: #1C2E4E;
+  --window-frame: #0B1730;
+  --ground: #3A4E70;
+  --flag: #F0546D;
+  --gul: #B58A2A;
+  --on-gul: #0B1730;
+  --tegl: #8E3626;
+  --on-tegl: #EDF2F7;
+  --hav: #2A6580;
+  --on-hav: #EDF2F7;
+  --salvie: #4A664A;
+  --on-salvie: #F1F5F0;
+  --rosa: #B98283;
+  --on-rosa: #0B1730;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --sky: #0B1730;
+    --paper: #13223D;
+    --ink: #EDF2F7;
+    --ink-soft: #A9B8CB;
+    --line: #2A3B58;
+    --edge: #61789A;
+    --fjord: #8DB8EE;
+    --on-fjord: #0B1730;
+    --lamp: #FFC65A;
+    --window-off: #1C2E4E;
+    --window-frame: #0B1730;
+    --ground: #3A4E70;
+    --flag: #F0546D;
+    --gul: #B58A2A;
+    --on-gul: #0B1730;
+    --tegl: #8E3626;
+    --on-tegl: #EDF2F7;
+    --hav: #2A6580;
+    --on-hav: #EDF2F7;
+    --salvie: #4A664A;
+    --on-salvie: #F1F5F0;
+    --rosa: #B98283;
+    --on-rosa: #0B1730;
+  }
+}

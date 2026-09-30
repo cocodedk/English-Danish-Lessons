@@ -8,6 +8,13 @@
 <title>Hej. Danish for English speakers</title>
 </head>
 <body>
+<script>
+try {
+  var prefs = JSON.parse(localStorage.getItem('edl.v1.prefs') || 'null');
+  var mode = prefs && prefs.schemaVersion === 1 && prefs.value && prefs.value.colorMode;
+  if (mode === 'light' || mode === 'dark') document.documentElement.setAttribute('data-theme', mode);
+} catch (e) {}
+</script>
 <div id="root"></div>
 <script type="module" src="/src/main.tsx"></script>
 </body>
