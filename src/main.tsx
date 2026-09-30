@@ -1,5 +1,6 @@
 import '@fontsource-variable/bricolage-grotesque'
 import '@fontsource-variable/atkinson-hyperlegible-next'
+import './styles/tokens.css'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { App } from './App'
