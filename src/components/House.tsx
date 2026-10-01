@@ -14,6 +14,8 @@ const GW = (W - 2 * PAD - COL_GAP) / 2
 const glow = stylex.keyframes({ from: { opacity: 0 }, to: { opacity: 0.22 } })
 
 const styles = stylex.create({
+  // Drawn at `width`, shrinking with the box it is in; the height follows the aspect ratio.
+  svg: { display: 'block', maxWidth: '100%', height: 'auto', marginInline: 'auto' },
   window: {
     transitionProperty: 'fill',
     transitionDuration: { default: '350ms', '@media (prefers-reduced-motion: reduce)': '0s' },
@@ -71,6 +73,7 @@ export function House({ color, gable, entryCount, lit, width }: Props) {
       aria-hidden="true"
       focusable="false"
       data-house={color}
+      {...stylex.props(styles.svg)}
     >
       <path d={gablePath(gable, h)} fill={`var(--${color})`} data-part="facade" data-gable={gable} />
       {windows.map(({ i, x, y, isLit }) => (
