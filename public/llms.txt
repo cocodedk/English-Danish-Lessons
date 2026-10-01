@@ -40,6 +40,10 @@ Every page of this site declares WebMCP tools with `document.modelContext.regist
 - `set_color_mode`: Sets the colour mode to auto, light or dark and returns it.
 - `delete_progress`: Deletes every lit window when called with confirm true, and returns ok.
 
+## About
+
+- `get_about`: Returns who made the site, when it was published and updated, where the Danish comes from and what is stored.
+
 ## Not found
 
 - `go_to_street`: Goes back to your street and returns the page it opened.

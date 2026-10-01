@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { lessons, totalEntries } from '../catalog'
 import { Pronunciation } from '../components/Pronunciation'
 import { Skyline } from '../components/Skyline'
+import { SiteFooter } from '../components/SiteFooter'
 import { StorageNote } from '../components/StorageNote'
 import { TopBar } from '../components/TopBar'
 import { wordSize } from '../components/wordSize'
@@ -92,6 +93,7 @@ export function Home() {
         {name === '' && (
           <Link to="/me" {...stylex.props(ui.focusable, ui.link, styles.addName)}>Add your name</Link>
         )}
+        <SiteFooter />
       </main>
     </div>
   )

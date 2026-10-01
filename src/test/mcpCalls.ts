@@ -22,5 +22,6 @@ export const PAGES: [string, string, string[]][] = [
   ['done', '/lesson/hej-og-tak/done', ['get_result', 'go_from_done']],
   ['sounds', '/sounds', ['get_sounds', 'hear_example']],
   ['me', '/me', ['get_settings', 'set_name', 'clear_name', 'set_color_mode', 'delete_progress']],
+  ['about', '/about', ['get_about']],
   ['not-found', '/nowhere', ['go_to_street']],
 ]
