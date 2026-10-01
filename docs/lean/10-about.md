@@ -84,8 +84,8 @@ Cards, in this order, copy final (`{…}` is filled in by code):
 
 1. **What it is** (`h2`): `Hej. teaches English speakers to hear and say Danish. Each lesson is a house on your street, and every word you hear and say lights a window.` · `It is free, has no accounts and no ads, and runs entirely in your browser.`
 2. **Made by**: `Made by Babak at ` + external link `cocode.dk` + `.` · `First published {formatDate(FIRST_PUBLISHED)}.` · `Updated {formatDate(BUILD_DATE)}.`
-3. **How it works**: `Hear each Danish word, say it out loud, then tap “I said it” to light its window. The Sounds page covers the letters and sounds English speakers trip on, and you can record yourself and listen back. Your recording never leaves your device.`
-4. **Where the Danish comes from**: `Pronunciations are taken from Den Danske Ordbog (` + external link `ordnet.dk` (to `DDO`) + `). The English sound guides are written by hand and are approximate.` · `The Danish and its sound guides are a draft until a Danish speaker has read them. If you spot a mistake, please ` + external link `tell us on GitHub` (to `ISSUES`) + `.`
+3. **How it works**: `Hear each Danish word, say it out loud, then tap “I said it” to light its window. On a lesson word you can also record yourself and listen back; your recording never leaves your device. The Sounds page covers the letters and sounds English speakers trip on.`
+4. **Where the Danish comes from**: `The pronunciation symbols (IPA) are taken from Den Danske Ordbog (` + external link `ordnet.dk` (to `DDO`) + `). The sound you hear is your own device’s Danish voice reading the word: it is not a recording from the dictionary or from a native speaker, and it can differ from how a Dane says it. The English sound guides are written by hand and are approximate.` · `The Danish and its sound guides are a draft until a Danish speaker has read them. If you spot a mistake, please ` + external link `tell us on GitHub` (to `ISSUES`) + `.`
 5. **Your privacy**: `Hej. saves your name, your progress and your colour choice in this browser only. Nothing is sent anywhere, and there are no accounts, no ads and no tracking.`
 6. **Credits**: `Built with React, Vite and StyleX. Fonts: Bricolage Grotesque, Atkinson Hyperlegible Next and Noto Sans, under the ` + external link `SIL Open Font License` (to `OFL`) + `. The Danish flag icon is the Dannebrog.` · `Source code on ` + external link `GitHub` (to `REPO`) + `, licensed under the Apache License 2.0 (` + external link `licence` (to `LICENSE_URL`) + `).`
 7. **For agents**: `This site declares WebMCP tools on every page, so an agent in your browser can read what is on screen. They are listed in ` + a plain link `llms.txt` to `./llms.txt` (relative, same tab) + `.`
@@ -125,6 +125,10 @@ The tests prove, at least:
    rule is amended to allow only `src/links.ts`).
 
 ## Answers to the grill
+
+- **Recording** is on lesson entry pages only; the How it works card says so.
+- **Audio versus IPA**: the Where the Danish comes from card says the IPA is DDO's and the sound is the
+  device's own voice, so nobody mistakes synthesized speech for a dictionary recording.
 
 - The footer's `Babak` is plain text, not a link; `cocode.dk` is the link.
 - Two dates on purpose: the fixed first publication and the build date. The build date changes on
