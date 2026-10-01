@@ -37,12 +37,19 @@ greeting and the street (above the storage note when both show). While `checking
 - `none`: first paragraph `No Danish sound on this device.` in 17/700, then `Hej. plays Danish with a
   Danish voice your device already has, and this one has none. The sound guides under each word still
   work.` Then a native `<details>` whose `<summary>` reads `How to add a Danish voice` and whose body
-  is two paragraphs: `Open your device's text-to-speech or spoken-content settings, add a Danish
-  voice, then reload this page. On Android it is usually under Settings, General management,
-  Text-to-speech (on some phones under System, Languages and input). On an iPhone it is under
-  Settings, Accessibility, Read and Speak, then Voices (older versions call it Spoken Content).` and
-  `Voices that need the internet are not used, because that would send the words to a speech
-  service.`
+  holds, in this order:
+  1. a paragraph `Pick your device. Menu names vary a little by maker and version.`
+  2. a bold label `Android` (a `<strong>` in its own paragraph) and an ordered list of four steps:
+     `Open Settings and search for “text-to-speech” (usually under General management, or under
+     System, Languages and input).` · `Choose Google Text-to-speech as the preferred engine, then open
+     its settings with the gear.` · `Tap Install voice data, choose Danish (Denmark) and download it.` ·
+     `Come back to this page and reload it.`
+  3. a bold label `iPhone` and an ordered list of four steps: `Open Settings, then Accessibility, then
+     Read and Speak (older versions call it Spoken Content).` · `Tap Voices, then Danish.` · `Choose a
+     voice and tap the download button next to it. Wait until it has finished.` · `Come back to this
+     page and reload it.`
+  4. a closing paragraph `Voices that need the internet are not used, because that would send the
+     words to a speech service.`
 - `unsupported`: `No Danish sound in this browser.` (17/700) and `Hej. cannot play sound here. The
   sound guides under each word still work. Another browser may play it.` No details.
 
@@ -87,8 +94,9 @@ Tests fake `speechSynthesis` (voices, `voiceschanged`, fake timers) and prove, a
    then `none` after exactly 2 s with no event, `available` if a qualifying voice arrives by
    `voiceschanged` before 2 s, and also if it arrives after (turning `none` back to `available`).
 2. **Home notice**: nothing while `checking` or `available`; the `none` text with the `<details>`
-   (closed by default, the exact summary and two paragraphs) and the `unsupported` text without
-   details; placement before the storage note and before the street; `role="note"`; no dismiss
+   (closed by default, the exact summary, the intro paragraph, the `Android` and `iPhone` labels
+   each followed by an ordered list of exactly the four steps above in that order, and the closing
+   paragraph) and the `unsupported` text without details; placement before the storage note and before the street; `role="note"`; no dismiss
    control; it disappears when a voice turns up.
 3. **Other pages**: the lesson entry and Sounds notes appear in the empty-list case after 2 s and
    disappear if a voice arrives; their texts are unchanged.
@@ -105,7 +113,8 @@ Tests fake `speechSynthesis` (voices, `voiceschanged`, fake timers) and prove, a
   once the cause is fixed.
 - Remote voices stay refused: privacy first (no request leaves the site). A consented online voice or
   recorded audio would be a separate spec.
-- The platform paths are hints (`usually under`); they vary by maker and version. Apple's current guide
+- Both platforms get their own numbered list because the menus differ; the first step of each says
+  where to start. The platform paths are hints (`usually under`); they vary by maker and version. Apple's current guide
   puts Voices under Accessibility, Read and Speak; the text names that and the older Spoken Content.
 - `get_street.voice` reports `unknown` while `checking`.
 
