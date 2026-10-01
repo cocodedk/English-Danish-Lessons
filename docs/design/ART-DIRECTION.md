@@ -161,8 +161,11 @@ One window per entry, in entry order, filling row by row. A lit window is never 
 the house always has a text count beside or under it ("6 of 8").
 
 **Skyline**. The lesson houses in one row, bottom-aligned on the ground line, 6 px apart, each with
-its title (15/600) and count (13, `ink-soft`) below. The row scrolls sideways with snap when it
-overflows; the scrollbar is hidden. A 6 px `ground` bar runs full width under the houses and an
+its title (14/600, centred, wrapping at spaces) and count (13, `ink-soft`) below, both under the
+house. The houses share the row: each is as wide as lets all of them fit (the row width minus the
+gaps, divided by the number of items), at most 96 px and at least 48 px, scaled uniformly (the
+height follows). The row scrolls sideways with snap only when even 48 px houses do not fit; the
+scrollbar is hidden. A 6 px `ground` bar runs full width under the houses and an
 18 px water strip fades from `line` to transparent beneath it. After the last house a dashed
 empty plot (`line`, dash 4 4, house-sized, `aria-hidden`) with the caption "Coming next".
 
@@ -189,7 +192,8 @@ the explanation paragraphs, then example rows split by 1.5 px `line` hairlines: 
 button, the Danish word (Bricolage 800, 32 px), the pronunciation line, the English and a tip
 (15, `ink-soft`). The tile is a sign, not a house: houses mean lessons.
 
-**Wordmark**. "Hej" in Bricolage 800 followed by a `flag`-coloured full stop. It links home.
+**Wordmark**. "Hej" in Bricolage 800 followed by a `flag`-coloured full stop. It links home. Home is the one page without it: its greeting `h1` is the brand there, and showing
+both would say Hej twice.
 
 ## Motion
 
