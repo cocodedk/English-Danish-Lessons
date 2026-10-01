@@ -4,7 +4,9 @@
 
 A free, mobile-first, purely static web app that teaches English speakers to HEAR and SAY Danish
 first. It assumes no Danish. "English-Danish-Lessons" is a working title: never hardcode it outside
-the workflows and the README. The name shown to learners is **Hej.**
+the workflows and the README. The public origin `https://hej.cocode.dk` may appear only in
+`index.html`, `public/robots.txt`, `public/sitemap.xml` and the README (social cards need absolute
+URLs), never in `src/`. The name shown to learners is **Hej.**
 
 It follows the sister projects Danish-Persian-Lessons and Danish-Japanese-Lessons (same product
 idea, the other way round) and is meant to be more beautiful than both. Their code is not reused;
