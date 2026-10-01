@@ -39,7 +39,8 @@ greeting and the street (above the storage note when both show). While `checking
   work.` Then a native `<details>` whose `<summary>` reads `How to add a Danish voice` and whose body
   is two paragraphs: `Open your device's text-to-speech or spoken-content settings, add a Danish
   voice, then reload this page. On Android it is usually under Settings, General management,
-  Text-to-speech. On an iPhone it is under Settings, Accessibility, Spoken Content, Voices.` and
+  Text-to-speech (on some phones under System, Languages and input). On an iPhone it is under
+  Settings, Accessibility, Read and Speak, then Voices (older versions call it Spoken Content).` and
   `Voices that need the internet are not used, because that would send the words to a speech
   service.`
 - `unsupported`: `No Danish sound in this browser.` (17/700) and `Hej. cannot play sound here. The
@@ -104,7 +105,8 @@ Tests fake `speechSynthesis` (voices, `voiceschanged`, fake timers) and prove, a
   once the cause is fixed.
 - Remote voices stay refused: privacy first (no request leaves the site). A consented online voice or
   recorded audio would be a separate spec.
-- The platform paths are hints (`usually under`); they vary by maker and version.
+- The platform paths are hints (`usually under`); they vary by maker and version. Apple's current guide
+  puts Voices under Accessibility, Read and Speak; the text names that and the older Spoken Content.
 - `get_street.voice` reports `unknown` while `checking`.
 
 ## Out of scope
