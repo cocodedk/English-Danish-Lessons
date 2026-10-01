@@ -1,5 +1,5 @@
 // The Pages workflow is text; these checks read it from disk (Vitest runs from the project root).
-import { readText } from './test/files'
+import { exists, readAll, readText } from './test/files'
 
 const workflow = await readText('.github/workflows/pages.yml')
 const readme = await readText('README.md')
@@ -79,6 +79,36 @@ describe('Deploy Pages workflow', () => {
 
 describe('README', () => {
   it('says where to play', () => {
-    expect(readme).toContain('\nPlay it: https://cocodedk.github.io/English-Danish-Lessons/\n')
+    expect(readme).toContain('\nPlay it: https://hej.cocode.dk/\n')
+  })
+
+  it('has no github.io play line', () => {
+    expect(readme).not.toMatch(/^Play it: .*github\.io/m)
+  })
+})
+
+describe('Path independence', () => {
+  const OLD_PATH = 'English-Danish-Lessons'
+  const BUILD_FIRST = 'dist is missing: run npm run build first'
+
+  it('sets base to ./ in vite.config.ts and names no project path', async () => {
+    const config = await readText('vite.config.ts')
+    expect(config).toMatch(/^\s*base: '\.\/',$/m)
+    expect(config).not.toContain(OLD_PATH)
+  })
+
+  it('builds index.html with only ./ local src and href', async () => {
+    expect(await exists('dist/index.html'), BUILD_FIRST).toBe(true)
+    const html = await readText('dist/index.html')
+    const urls = [...html.matchAll(/\b(?:src|href)="([^"]*)"/g)].map((m) => m[1]).filter((u) => !/^(https?:|data:|#)/.test(u))
+    expect(urls.length).toBeGreaterThan(0)
+    for (const url of urls) expect(url, url).toMatch(/^\.\//)
+    expect(html).not.toContain(OLD_PATH)
+  })
+
+  it('builds CSS without root-relative url() references', async () => {
+    const css = await readAll('dist/assets', '.css')
+    expect(css.length, BUILD_FIRST).toBeGreaterThan(0)
+    for (const file of css) expect(file).not.toMatch(/url\(\s*["']?\//)
   })
 })

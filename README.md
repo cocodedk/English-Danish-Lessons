@@ -3,7 +3,7 @@
 **Hej.** A free, static web app that teaches English speakers to hear and say Danish. No accounts, no
 backend, no tracking: progress stays in your browser.
 
-Play it: https://cocodedk.github.io/English-Danish-Lessons/
+Play it: https://hej.cocode.dk/
 
 Built with React, Vite and StyleX. Every lesson is data in the repository.
 

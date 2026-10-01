@@ -15,6 +15,10 @@ export async function readText(path: string): Promise<string> {
   return (await fs()).readFileSync(path, 'utf8')
 }
 
+export async function exists(path: string): Promise<boolean> {
+  return (await fs()).existsSync(path)
+}
+
 /** The text of every file in `dir` whose name ends with `ext`; empty when the directory is missing. */
 export async function readAll(dir: string, ext: string): Promise<string[]> {
   const { existsSync, readdirSync, readFileSync } = await fs()

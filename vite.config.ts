@@ -10,10 +10,9 @@ const stylexPlugins = (testing: boolean) =>
     testing ? { ...(p as Plugin), configureServer: undefined } : (p as Plugin),
   )
 
-// The literal project path below is the one sanctioned place for it outside
-// the GitHub Actions workflows (see CLAUDE.md).
+// The app lives wherever its folder is served from: every built URL is relative.
 export default defineConfig(({ mode }) => ({
-  base: '/English-Danish-Lessons/',
+  base: './',
   // ORDER IS LOAD-BEARING: the StyleX plugin must come before the React plugin.
   plugins: [...stylexPlugins(mode === 'test'), react()],
   build: { outDir: 'dist' },
