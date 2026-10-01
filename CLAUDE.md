@@ -4,7 +4,7 @@
 
 A free, mobile-first, purely static web app that teaches English speakers to HEAR and SAY Danish
 first. It assumes no Danish. "English-Danish-Lessons" is a working title: never hardcode it outside
-`vite.config.ts` and the workflows. The name shown to learners is **Hej.**
+the workflows and the README. The name shown to learners is **Hej.**
 
 It follows the sister projects Danish-Persian-Lessons and Danish-Japanese-Lessons (same product
 idea, the other way round) and is meant to be more beautiful than both. Their code is not reused;
@@ -13,7 +13,9 @@ their product rules are, as written below.
 - **Stack**: TypeScript (strict), React 19, Vite 8, **StyleX** for every style, React Router
   `HashRouter`, Vitest + jsdom. Node ≥ 20. Fonts self-hosted through `@fontsource-variable`.
 - **Architecture**: static SPA. No backend, no database, no accounts, no analytics — ever.
-- **Hosting**: GitHub Pages (a later spec). Vite `base` is `/English-Danish-Lessons/`.
+- **Hosting**: GitHub Pages at https://hej.cocode.dk/ (custom domain, CNAME to `cocodedk.github.io`,
+  HTTPS enforced), deployed by `.github/workflows/pages.yml` on every push to `main`. Vite `base` is
+  `./`, so the same build also works at the project path.
 - **Owner**: `cocodedk`.
 
 ## Product contract (non-negotiable)
