@@ -15,6 +15,12 @@ export async function readText(path: string): Promise<string> {
   return (await fs()).readFileSync(path, 'utf8')
 }
 
+export async function readBytes(path: string): Promise<Uint8Array> {
+  const name = 'node:fs'
+  const { readFileSync } = (await import(/* @vite-ignore */ name)) as { readFileSync: (path: string) => Uint8Array }
+  return readFileSync(path)
+}
+
 export async function exists(path: string): Promise<boolean> {
   return (await fs()).existsSync(path)
 }
