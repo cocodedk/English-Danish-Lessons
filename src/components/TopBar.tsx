@@ -51,6 +51,15 @@ const styles = stylex.create({
     paddingBottom: { default: 24, '@media (min-width: 900px)': 0 },
     paddingInline: { default: space.s16, '@media (min-width: 900px)': 0 },
   },
+  // The nav without a header around it: from 900 px it takes the header's place and size.
+  bare: {
+    width: '100%',
+    maxWidth: { default: null, '@media (min-width: 900px)': 720 },
+    marginInline: { default: 0, '@media (min-width: 900px)': 'auto' },
+    minHeight: { default: null, '@media (min-width: 900px)': 64 },
+    alignItems: 'center',
+    paddingInline: { default: space.s16, '@media (min-width: 900px)': space.s32 },
+  },
   item: {
     display: 'flex',
     flexDirection: { default: 'column', '@media (min-width: 900px)': 'row' },
@@ -93,21 +102,32 @@ function NavLink({ to, label, current }: { to: string; label: string; current: b
   )
 }
 
-/** The wordmark, and the main nav when `nav` is set. `current` is left out on Not found. */
-export function TopBar({ nav = false, current }: { nav?: boolean; current?: NavItem }) {
+function MainNav({ current, bare = false }: { current?: NavItem; bare?: boolean }) {
+  return (
+    <nav aria-label="Main" {...stylex.props(styles.nav, bare && styles.bare)}>
+      <NavLink to="/" label="Street" current={current === 'street'} />
+      <NavLink to="/sounds" label="Sounds" current={current === 'sounds'} />
+      <NavLink to="/me" label="Me" current={current === 'me'} />
+    </nav>
+  )
+}
+
+/**
+ * The wordmark, and the main nav when `nav` is set. `current` is left out on Not found.
+ * Without the wordmark (Home) the bar holds only the nav, so there is no `header`: the nav
+ * stands alone, a bottom bar on phone and tablet, right-aligned at the top from 900 px.
+ */
+export function TopBar({ nav = false, current, wordmark = true }: { nav?: boolean; current?: NavItem; wordmark?: boolean }) {
+  if (!wordmark) {
+    return nav ? <MainNav current={current} bare /> : null
+  }
   return (
     <header {...stylex.props(styles.header)}>
       <Link to="/" {...stylex.props(ui.focusable, styles.wordmark)}>
         {APP_NAME}
         <span {...stylex.props(styles.stop)}>.</span>
       </Link>
-      {nav && (
-        <nav aria-label="Main" {...stylex.props(styles.nav)}>
-          <NavLink to="/" label="Street" current={current === 'street'} />
-          <NavLink to="/sounds" label="Sounds" current={current === 'sounds'} />
-          <NavLink to="/me" label="Me" current={current === 'me'} />
-        </nav>
-      )}
+      {nav && <MainNav current={current} />}
     </header>
   )
 }

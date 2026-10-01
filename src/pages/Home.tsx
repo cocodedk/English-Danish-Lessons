@@ -18,6 +18,8 @@ import { useWebMcp } from '../webmcp/helper'
 
 const styles = stylex.create({
   section: { marginTop: space.s24 },
+  // With no bar above it on phone and tablet, the greeting starts the page.
+  h1: { marginTop: { default: space.s24, '@media (min-width: 900px)': space.s16 } },
   cardTop: { display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: space.s12 },
   word: (fontSize: number) => ({
     margin: 0,
@@ -56,9 +58,9 @@ export function Home() {
 
   return (
     <div {...stylex.props(ui.shell)}>
-      <TopBar nav current="street" />
+      <TopBar nav current="street" wordmark={false} />
       <main {...stylex.props(ui.content)}>
-        <h1 tabIndex={-1} {...stylex.props(ui.h1)}>{name === '' ? 'Hej.' : `Hej, ${name}.`}</h1>
+        <h1 tabIndex={-1} {...stylex.props(ui.h1, styles.h1)}>{name === '' ? 'Hej.' : `Hej, ${name}.`}</h1>
         <p {...stylex.props(ui.body)}>{windowsLine(countLit(progress), totalEntries(), first.title)}</p>
         <StorageNote />
         <div {...stylex.props(styles.section)}>

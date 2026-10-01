@@ -1,17 +1,19 @@
 import * as stylex from '@stylexjs/stylex'
+import type { CSSProperties } from 'react'
 import { Link } from 'react-router-dom'
 import { PLANNED_LESSONS, type Lesson } from '../catalog'
 import { litIds, type Progress } from '../storage/stores'
 import { colors, space } from '../styles/tokens.stylex'
 import { ui } from '../styles/ui'
 import { House, houseHeight } from './House'
+import { streetItem } from './streetItem'
 
 const HOUSE_WIDTH = 96
 
 const styles = stylex.create({
   scroller: { overflowX: 'auto', scrollbarWidth: 'none', scrollSnapType: 'x proximity' },
-  // At least as wide as the screen and as wide as every house: the strips run the whole street.
-  street: { width: 'max-content', minWidth: '100%' },
+  // As wide as the screen: the strips run the whole street.
+  street: { width: '100%' },
   row: {
     display: 'flex',
     alignItems: 'flex-end',
@@ -21,29 +23,24 @@ const styles = stylex.create({
   },
   item: {
     boxSizing: 'border-box',
-    flexShrink: 0,
     scrollSnapAlign: 'start',
-    width: HOUSE_WIDTH + 6,
-    paddingInline: 3,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'stretch',
     textAlign: 'center',
   },
   link: {
-    display: 'flex',
-    justifyContent: 'center',
+    display: 'block',
     textDecoration: 'none',
     color: colors.ink,
   },
   ground: { height: 6, backgroundColor: colors.ground },
   water: { height: 18, backgroundImage: 'linear-gradient(var(--line), transparent)' },
-  title: { fontSize: 15, fontWeight: 600, lineHeight: 1.4, marginTop: space.s8 },
+  title: { fontSize: 14, fontWeight: 600, lineHeight: 1.4, marginTop: space.s8 },
   count: { fontSize: 13, lineHeight: 1.3, color: colors.inkSoft },
   plot: {
     boxSizing: 'border-box',
-    width: HOUSE_WIDTH,
-    marginInline: 'auto',
+    width: '100%',
     borderTopWidth: 2,
     borderLeftWidth: 2,
     borderRightWidth: 2,
@@ -69,6 +66,8 @@ export function Skyline({ lessons, progress }: { lessons: readonly Lesson[]; pro
     return new Set(lesson.entries.flatMap((e, i) => (ids.includes(e.id) ? [i] : [])))
   }
   const showPlot = lessons.length < PLANNED_LESSONS
+  const items = lessons.length + (showPlot ? 1 : 0)
+  const item = stylex.props(styles.item, streetItem.width)
   return (
     <section aria-labelledby="street-caption">
       <div {...stylex.props(styles.caption, ui.caption)}>
@@ -76,12 +75,12 @@ export function Skyline({ lessons, progress }: { lessons: readonly Lesson[]; pro
         <span>{lessons.length === 1 ? '1 lesson' : `${lessons.length} lessons`}</span>
       </div>
       <div {...stylex.props(styles.scroller)}>
-        <div {...stylex.props(styles.street)}>
-          <ul {...stylex.props(styles.row)}>
+        <div data-street style={{ '--lessons': items } as CSSProperties} {...stylex.props(styles.street, streetItem.street)}>
+          <ul {...stylex.props(styles.row, streetItem.row)}>
             {lessons.map((lesson) => {
               const windows = lit(lesson)
               return (
-                <li key={lesson.id} {...stylex.props(styles.item)}>
+                <li key={lesson.id} {...item}>
                   <Link
                     to={`/lesson/${lesson.id}`}
                     aria-label={houseLabel(lesson, windows.size)}
@@ -99,16 +98,16 @@ export function Skyline({ lessons, progress }: { lessons: readonly Lesson[]; pro
               )
             })}
             {showPlot && (
-              <li aria-hidden="true" {...stylex.props(styles.item)}>
-                <div data-plot {...stylex.props(styles.plot)} style={{ height: houseHeight(lessons[lessons.length - 1].entries.length) }} />
+              <li aria-hidden="true" {...item}>
+                <div data-plot {...stylex.props(styles.plot)} style={{ aspectRatio: `${HOUSE_WIDTH} / ${houseHeight(lessons[lessons.length - 1].entries.length)}` }} />
               </li>
             )}
           </ul>
           <div aria-hidden="true" {...stylex.props(styles.ground)} />
           <div aria-hidden="true" {...stylex.props(styles.water)} />
-          <ul {...stylex.props(styles.row)}>
+          <ul {...stylex.props(styles.row, streetItem.row)}>
             {lessons.map((lesson) => (
-              <li key={lesson.id} {...stylex.props(styles.item)}>
+              <li key={lesson.id} {...item}>
                 <span lang="da" {...stylex.props(styles.title)}>{lesson.title}</span>
                 <span aria-hidden="true" {...stylex.props(styles.count)}>
                   {lit(lesson).size} of {lesson.entries.length}
@@ -116,7 +115,7 @@ export function Skyline({ lessons, progress }: { lessons: readonly Lesson[]; pro
               </li>
             ))}
             {showPlot && (
-              <li {...stylex.props(styles.item)}>
+              <li {...item}>
                 <span {...stylex.props(styles.count, styles.title)}>Coming next</span>
               </li>
             )}
