@@ -3,6 +3,12 @@ import { getSynth, pickVoice, waitForVoice } from './voices'
 
 export const RATE = 0.85
 export const VOICE_WAIT_MS = 1000
+export const VOICE_CHECK_MS = 2000
+
+export type VoiceState = 'checking' | 'available' | 'none' | 'unsupported'
+/** What the WebMCP tools report: `checking` is `unknown`. */
+export type ToolVoice = Exclude<VoiceState, 'checking'> | 'unknown'
+export const toolVoice = (state: VoiceState): ToolVoice => (state === 'checking' ? 'unknown' : state)
 
 export type SpeechStatus = 'idle' | 'lookup' | 'speaking'
 export type HearResult = { ok: boolean; started: boolean; reason?: 'no-danish-voice' | 'unsupported' | 'error' | 'recording' }
@@ -23,14 +29,19 @@ export function useSpeech(text = '') {
   const textRef = useRef(text)
   textRef.current = text
 
-  // Read the voices once on mount and keep listening for the life of the page.
+  const [timedOut, setTimedOut] = useState(false)
+
+  // Read the voices once on mount and keep listening for the life of the page. An empty list
+  // gets VOICE_CHECK_MS to fill before it counts as no voice.
   useEffect(() => {
     const synth = getSynth()
     if (!synth) return
     const read = () => setVoices(synth.getVoices())
     read()
     synth.addEventListener('voiceschanged', read)
+    const timer = setTimeout(() => setTimedOut(true), VOICE_CHECK_MS)
     return () => {
+      clearTimeout(timer)
       synth.removeEventListener('voiceschanged', read)
       run.current += 1
       synth.cancel()
@@ -38,7 +49,14 @@ export function useSpeech(text = '') {
   }, [])
 
   const hasVoice = pickVoice(voices) !== undefined
-  const noVoice = !supported || (!hasVoice && (voices.length > 0 || tapFoundNone))
+  const voice: VoiceState = !supported
+    ? 'unsupported'
+    : hasVoice
+      ? 'available'
+      : voices.length > 0 || tapFoundNone || timedOut
+        ? 'none'
+        : 'checking'
+  const noVoice = voice === 'none' || voice === 'unsupported'
 
   const stop = useCallback(() => {
     run.current += 1
@@ -53,9 +71,9 @@ export function useSpeech(text = '') {
     synth.cancel()
     setFailed(false)
     setStatus('lookup')
-    const voice = pickVoice(synth.getVoices()) ?? (await waitForVoice(synth, VOICE_WAIT_MS))
+    const found = pickVoice(synth.getVoices()) ?? (await waitForVoice(synth, VOICE_WAIT_MS))
     if (id !== run.current) return { ok: true, started: false }
-    if (!voice) {
+    if (!found) {
       setStatus('idle')
       setTapFoundNone(true)
       return { ok: false, started: false, reason: 'no-danish-voice' }
@@ -63,8 +81,8 @@ export function useSpeech(text = '') {
     setTapFoundNone(false)
     try {
       const utterance = new SpeechSynthesisUtterance(word ?? textRef.current)
-      utterance.voice = voice
-      utterance.lang = voice.lang
+      utterance.voice = found
+      utterance.lang = found.lang
       utterance.rate = RATE
       utterance.onend = () => {
         if (id === run.current) setStatus('idle')
@@ -91,6 +109,5 @@ export function useSpeech(text = '') {
     return { ok: true, started: false }
   }, [play, stop])
 
-  const voice: 'available' | 'none' | 'unsupported' = !supported ? 'unsupported' : hasVoice ? 'available' : 'none'
   return { status, supported, noVoice, failed, voice, press, play, stop }
 }

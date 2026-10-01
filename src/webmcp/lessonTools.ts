@@ -1,6 +1,6 @@
 import type { Lesson } from '../catalog'
 import type { RecordPhase } from '../recorder/machine'
-import type { HearResult, SpeechStatus } from '../speech/useSpeech'
+import type { HearResult, SpeechStatus, ToolVoice } from '../speech/useSpeech'
 import { countLit, litIds, progressStore } from '../storage/stores'
 import { totalEntries } from '../catalog'
 import { fail, NO_INPUT, type Tool } from './helper'
@@ -8,7 +8,7 @@ import { fail, NO_INPUT, type Tool } from './helper'
 export type LessonContext = {
   lesson: Lesson
   position: number
-  voice: 'available' | 'none' | 'unsupported'
+  voice: ToolVoice
   status: SpeechStatus
   recording: 'none' | Exclude<RecordPhase, 'idle'>
   hear: () => Promise<HearResult>

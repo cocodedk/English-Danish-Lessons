@@ -34,6 +34,7 @@ describe('webmcp', () => {
       windowsLit: 0,
       windowsTotal: 46,
       storage: 'saved',
+      voice: 'unsupported',
       lessons: [
         { id: 'hej-og-tak', title: 'Hej og tak', titleEn: 'Hello and thanks', lit: 0, total: 8, done: false },
         { id: 'hvem-er-du', title: 'Hvem er du?', titleEn: 'Who are you?', lit: 0, total: 8, done: false },
