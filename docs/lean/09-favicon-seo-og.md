@@ -43,7 +43,10 @@ for character; keep the existing charset, viewport and pre-paint script as they 
 - Structured data, one `<script type="application/ld+json">` holding exactly this object
   (formatting free):
   `{"@context":"https://schema.org","@type":"WebApplication","name":"Hej.","url":"https://hej.cocode.dk/","description":` the description above `,"applicationCategory":"EducationalApplication","operatingSystem":"Any","inLanguage":"en","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"teaches":"Danish","author":{"@type":"Person","name":"Babak","url":"https://cocode.dk"}}`
-- In the body, before `<div id="root">`: `<noscript><p>Hej. teaches English speakers to hear and say Danish. It needs JavaScript to run: turn it on and reload.</p></noscript>`
+- In the body, before `<div id="root">`: `<noscript><p style="font:17px/1.45 system-ui,sans-serif;margin:24px;max-width:36em">Hej. teaches English speakers to hear and say Danish. It needs JavaScript to run: turn it on and reload.</p></noscript>`
+  This is the one visible exception to "no visible UI changes": it shows only when scripts are
+  off, when nothing of the app renders. It matches no design reference and uses no tokens: a plain
+  paragraph in the browser's own colours, exactly the inline style above.
 
 ## New files
 
@@ -76,8 +79,9 @@ Tests read the files from disk (`node:fs`, paths relative to the project root) a
 6. The existing static checks (no network calls, no `http://` or `https://` in `src/` outside
    tests) still pass; the origin appears nowhere in `src/`.
 
-Note on item 3: assert format facts only (signature, dimensions, viewBox, colours), never byte
-sizes of the four binaries; that they are unmodified is checked by review of the diff.
+Note on item 3: assert format facts (signature, dimensions, viewBox, colours) and, for `og.png`
+only, the upper bound of 300 KB; never an exact byte size of any of the four binaries. That they
+are unmodified is checked by review of the diff.
 
 ## Answers to the grill
 
@@ -85,6 +89,8 @@ sizes of the four binaries; that they are unmodified is checked by review of the
   other personal data goes in the page.
 - The Twitter and OG tags carry the same strings on purpose; one change must not drift from the other.
 - `og:locale` is `en_US`: the page is English; the Danish is the subject, not the language of the UI.
+- The no-JavaScript paragraph is the only visible change; the style attribute above is the one inline
+  style allowed (it is static HTML, outside `src/`).
 - No web app manifest, no `hreflang`, no analytics, no extra pages in the sitemap.
 - The builder may update `src/deploy.test.ts` or other tests only to raise counts or to keep them
   passing with the new `index.html`.
