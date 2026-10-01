@@ -45,8 +45,12 @@ for character; keep the existing charset, viewport and pre-paint script as they 
   `{"@context":"https://schema.org","@type":"WebApplication","name":"Hej.","url":"https://hej.cocode.dk/","description":` the description above `,"applicationCategory":"EducationalApplication","operatingSystem":"Any","inLanguage":"en","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"teaches":"Danish","author":{"@type":"Person","name":"Babak","url":"https://cocode.dk"}}`
 - In the body, before `<div id="root">`: `<noscript><p style="font:17px/1.45 system-ui,sans-serif;margin:24px;max-width:36em">Hej. teaches English speakers to hear and say Danish. It needs JavaScript to run: turn it on and reload.</p></noscript>`
   This is the one visible exception to "no visible UI changes": it shows only when scripts are
-  off, when nothing of the app renders. It matches no design reference and uses no tokens: a plain
-  paragraph in the browser's own colours, exactly the inline style above.
+  off, when nothing of the app renders. Its design reference is the Not found page's text-only
+  look (left-aligned text, nothing else on the page) without the top bar. The linked stylesheet
+  still loads with scripts off, so the page keeps the app's own page background and text colour
+  from `tokens.css` (sky and ink, light or dark by the device); the paragraph inherits them and
+  adds only the font, margin and measure in the inline style above. No tokens are referenced from
+  the HTML.
 
 ## New files
 
@@ -90,7 +94,8 @@ are unmodified is checked by review of the diff.
 - The Twitter and OG tags carry the same strings on purpose; one change must not drift from the other.
 - `og:locale` is `en_US`: the page is English; the Danish is the subject, not the language of the UI.
 - The no-JavaScript paragraph is the only visible change; the style attribute above is the one inline
-  style allowed (it is static HTML, outside `src/`).
+  style allowed (it is static HTML, outside `src/`). It keeps the app's token-based page colours; it
+  does not use the browser's default colours.
 - No web app manifest, no `hreflang`, no analytics, no extra pages in the sitemap.
 - The builder may update `src/deploy.test.ts` or other tests only to raise counts or to keep them
   passing with the new `index.html`.
