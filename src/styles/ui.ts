@@ -71,6 +71,7 @@ export const ui = stylex.create({
     minHeight: 48,
     minWidth: 48,
   },
+  textLink: { color: colors.fjord, fontWeight: 600, textDecoration: 'underline' },
   button: {
     boxSizing: 'border-box',
     display: 'inline-flex',

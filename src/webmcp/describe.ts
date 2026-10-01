@@ -1,7 +1,7 @@
 import type { Tool } from './helper'
 import { NO_INPUT } from './helper'
 
-export type PageKind = 'home' | 'lesson' | 'done' | 'sounds' | 'me' | 'not-found'
+export type PageKind = 'home' | 'lesson' | 'done' | 'sounds' | 'me' | 'about' | 'not-found'
 
 // The tools each page declares, besides `describe`. A test checks this against what pages register.
 export const PAGE_TOOLS: Record<PageKind, string[]> = {
@@ -10,6 +10,7 @@ export const PAGE_TOOLS: Record<PageKind, string[]> = {
   done: ['get_result', 'go_from_done'],
   sounds: ['get_sounds', 'hear_example'],
   me: ['get_settings', 'set_name', 'clear_name', 'set_color_mode', 'delete_progress'],
+  about: ['get_about'],
   'not-found': ['go_to_street'],
 }
 
@@ -19,6 +20,7 @@ const SUMMARIES: Record<PageKind, string> = {
   done: 'The result of the lesson: how many windows are lit, and where to go next.',
   sounds: 'Four cards about Danish sounds, each with three example words to hear.',
   me: 'Your name, colour mode and progress, all kept in this browser.',
+  about: 'About Hej.: who made it and when, where the Danish comes from, what is stored, and what it is built with.',
   'not-found': 'This page does not exist; one link leads back to your street.',
 }
 

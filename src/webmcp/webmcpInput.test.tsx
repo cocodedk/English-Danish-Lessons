@@ -96,6 +96,6 @@ describe('webmcp input and registration', () => {
     }
     const listed = Object.fromEntries([...llms.matchAll(/^- `([a-z_]+)`: (.+)$/gm)].map((m) => [m[1], m[2]]))
     expect(listed).toEqual(registered)
-    expect(Object.keys(registered)).toHaveLength(17)
+    expect(Object.keys(registered)).toHaveLength(18)
   })
 })

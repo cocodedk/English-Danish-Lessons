@@ -22,10 +22,11 @@ describe('static app', () => {
     }
   })
 
-  it('makes no network request and mentions no web address but the SVG namespace', () => {
+  it('makes no network request and mentions no web address but the SVG namespace and src/links.ts', () => {
     for (const [file, text] of Object.entries(sources)) {
       const cleaned = text.split(SVG_NS).join('')
-      for (const banned of ['fetch(', 'XMLHttpRequest', 'sendBeacon', 'WebSocket', 'indexedDB', 'http://', 'https://']) {
+      const addresses = file === '/src/links.ts' ? [] : ['http://', 'https://']
+      for (const banned of ['fetch(', 'XMLHttpRequest', 'sendBeacon', 'WebSocket', 'indexedDB', ...addresses]) {
         expect(cleaned.includes(banned), `${file} mentions ${banned}`).toBe(false)
       }
     }

@@ -2,6 +2,7 @@ import * as stylex from '@stylexjs/stylex'
 import { useRef, useState } from 'react'
 import { sounds } from '../catalog/sounds'
 import { SoundSection } from '../components/SoundSection'
+import { SiteFooter } from '../components/SiteFooter'
 import { TopBar } from '../components/TopBar'
 import { APP_NAME } from '../constants'
 import { usePage } from '../pageHooks'
@@ -56,6 +57,7 @@ export function Sounds() {
             <SoundSection key={card.id} card={card} active={active} status={speech.status} disabled={speech.noVoice} onHear={hear} />
           ))}
         </div>
+        <SiteFooter />
       </main>
     </div>
   )

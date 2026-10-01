@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { Navigate, Route, Routes, useLocation, useParams } from 'react-router-dom'
 import { getLesson } from './catalog'
+import { About } from './pages/About'
 import { DoneRoute } from './pages/Done'
 import { Home } from './pages/Home'
 import { LessonRoute } from './pages/Lesson'
@@ -49,6 +50,7 @@ export function AppRoutes() {
       <Route path="/lesson/:lessonId/:position" element={<LessonRoute />} />
       <Route path="/sounds" element={<Sounds />} />
       <Route path="/me" element={<Me />} />
+      <Route path="/about" element={<About />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   )

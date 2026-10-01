@@ -13,6 +13,7 @@ const stylexPlugins = (testing: boolean) =>
 // The app lives wherever its folder is served from: every built URL is relative.
 export default defineConfig(({ mode }) => ({
   base: './',
+  define: { __BUILD_DATE__: JSON.stringify(new Date().toISOString().slice(0, 10)) },
   // ORDER IS LOAD-BEARING: the StyleX plugin must come before the React plugin.
   plugins: [...stylexPlugins(mode === 'test'), react()],
   build: { outDir: 'dist' },

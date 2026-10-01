@@ -1,6 +1,7 @@
 import * as stylex from '@stylexjs/stylex'
 import { useEffect, useRef, useState } from 'react'
 import { totalEntries } from '../catalog'
+import { SiteFooter } from '../components/SiteFooter'
 import { StorageNote } from '../components/StorageNote'
 import { TopBar } from '../components/TopBar'
 import { APP_NAME } from '../constants'
@@ -91,6 +92,7 @@ export function Me() {
           />
           <PrivacySection />
         </div>
+        <SiteFooter />
       </main>
     </div>
   )
