@@ -50,7 +50,10 @@ for character; keep the existing charset, viewport and pre-paint script as they 
   still loads with scripts off, so the page keeps the app's own page background and text colour
   from `tokens.css` (sky and ink, light or dark by the device); the paragraph inherits them and
   adds only the font, margin and measure in the inline style above. No tokens are referenced from
-  the HTML.
+  the HTML. Today the `html, body` rule in `src/styles/tokens.css` sets only the background, so the
+  text would be the browser's black on a dark sky in dark mode: add one declaration to that rule,
+  `color: var(--ink)`. That is the only change allowed in `tokens.css` and the only change under
+  `src/` besides tests.
 
 ## New files
 
@@ -80,7 +83,9 @@ Tests read the files from disk (`node:fs`, paths relative to the project root) a
 5. After `npm run build`, `dist/` contains the four assets, `robots.txt` and `sitemap.xml`, and
    `dist/index.html` references the icons with `./` URLs (this test reads `dist/` and fails with a
    message saying to run `npm run build` first if it is missing).
-6. The existing static checks (no network calls, no `http://` or `https://` in `src/` outside
+6. `src/styles/tokens.css`'s `html, body` rule has both the background and `color: var(--ink)`, and
+   the existing contrast test (ink on sky, both themes) still passes.
+7. The existing static checks (no network calls, no `http://` or `https://` in `src/` outside
    tests) still pass; the origin appears nowhere in `src/`.
 
 Note on item 3: assert format facts (signature, dimensions, viewBox, colours) and, for `og.png`
@@ -102,5 +107,5 @@ are unmodified is checked by review of the diff.
 
 ## Out of scope
 
-Any change under `src/` other than tests, the four binary assets, `CLAUDE.md`, `docs/design/`,
+Any change under `src/` other than tests and the one `color` declaration in `tokens.css`, the four binary assets, `CLAUDE.md`, `docs/design/`,
 a manifest, a service worker, analytics, and the About page (spec 10).
