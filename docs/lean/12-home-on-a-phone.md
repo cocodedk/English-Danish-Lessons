@@ -21,7 +21,8 @@ paragraphs were updated for this), `docs/lean/01-hej-og-tak.md`, `docs/lean/03-h
   nothing, so it is not rendered at all (no empty 64 px strip) and the greeting `h1` starts the
   page with 24 px of space above it.
 - The greeting is unchanged: `Hej.` with no saved name, `Hej, {name}.` with one.
-- Every other page keeps its wordmark exactly as today. The main nav (bottom bar on phone and tablet)
+- Every other page keeps its top bar exactly as today (wordmark where it has one: Sounds, Me, About,
+  Not found, done; back chip and position label on the lesson entry). The main nav (bottom bar on phone and tablet)
   stays on Home as today.
 
 ## 2. A street that fits
@@ -49,7 +50,8 @@ The tests prove, at least:
 
 1. **One Hej**: with no name, exactly one element on Home reads `Hej.` (the `h1`) and there is no
    wordmark link; with a name, `Hej, Sam.` and no wordmark; on Sounds, Me, About, Not found and the
-   lesson entry the wordmark is still there; Home still has the main nav landmark.
+   done page the wordmark is still there; the lesson entry page keeps its back chip and position
+   label exactly as today (it never had a wordmark); Home still has the main nav landmark.
 2. **Top bar**: on Home the bar renders no wordmark and, when it would be empty (phone and tablet),
    no `header` element at all; the nav stays reachable.
 3. **Street items**: with five lessons the street has five items in each row and no empty plot; with
@@ -67,6 +69,9 @@ jsdom has no layout, so the real proof is by eye on a phone after it is deployed
 assert pixel widths.
 
 ## Answers to the grill
+
+- The lesson entry page has no wordmark and keeps its back chip and `{lesson} · {n} of {N}` label; only
+  Home loses its wordmark.
 
 - Home is the one page without a wordmark because its big greeting is the brand there; a name makes
   the greeting `Hej, Sam.`, which would still sit under a `Hej.` wordmark.
