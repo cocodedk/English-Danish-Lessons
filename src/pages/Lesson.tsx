@@ -8,7 +8,7 @@ import { Specimen } from '../components/Specimen'
 import { APP_NAME } from '../constants'
 import { usePage } from '../pageHooks'
 import { useRecorder } from '../recorder/useRecorder'
-import { useSpeech, type HearResult } from '../speech/useSpeech'
+import { toolVoice, useSpeech, type HearResult } from '../speech/useSpeech'
 import { useProgress } from '../storage/hooks'
 import { lightEntry, litIds, progressStore } from '../storage/stores'
 import { colors, fonts, radii, space } from '../styles/tokens.stylex'
@@ -97,7 +97,7 @@ function LessonEntry({ lesson, position }: { lesson: LessonData; position: numbe
     lessonTools({
       lesson,
       position,
-      voice: speech.voice,
+      voice: toolVoice(speech.voice),
       status: speech.status,
       recording: recorder.phase === 'idle' ? 'none' : recorder.phase,
       hear,

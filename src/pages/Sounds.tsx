@@ -6,7 +6,7 @@ import { SiteFooter } from '../components/SiteFooter'
 import { TopBar } from '../components/TopBar'
 import { APP_NAME } from '../constants'
 import { usePage } from '../pageHooks'
-import { useSpeech, type HearResult } from '../speech/useSpeech'
+import { toolVoice, useSpeech, type HearResult } from '../speech/useSpeech'
 import { space } from '../styles/tokens.stylex'
 import { ui } from '../styles/ui'
 import { useWebMcp } from '../webmcp/helper'
@@ -37,8 +37,7 @@ export function Sounds() {
     return same ? speech.press(word) : speech.play(word)
   }
 
-  const voice = speech.voice === 'none' && !speech.noVoice ? 'unknown' : speech.voice
-  useWebMcp(soundsTools({ voice, hear }))
+  useWebMcp(soundsTools({ voice: toolVoice(speech.voice), hear }))
 
   return (
     <div {...stylex.props(ui.shell)}>

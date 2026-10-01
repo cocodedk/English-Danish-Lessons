@@ -7,8 +7,10 @@ import { Skyline } from '../components/Skyline'
 import { SiteFooter } from '../components/SiteFooter'
 import { StorageNote } from '../components/StorageNote'
 import { TopBar } from '../components/TopBar'
+import { VoiceNotice } from '../components/VoiceNotice'
 import { wordSize } from '../components/wordSize'
 import { HOME_TITLE, usePage } from '../pageHooks'
+import { toolVoice, useSpeech } from '../speech/useSpeech'
 import { useProfile, useProgress } from '../storage/hooks'
 import { countLit, firstUnlit, litIds } from '../storage/stores'
 import { fonts, space } from '../styles/tokens.stylex'
@@ -48,7 +50,8 @@ export function Home() {
   const { name } = useProfile()
   const progress = useProgress()
   usePage('home', HOME_TITLE)
-  useWebMcp(homeTools((to) => navigate(to)))
+  const speech = useSpeech()
+  useWebMcp(homeTools((to) => navigate(to), toolVoice(speech.voice)))
 
   const first = lessons[0]
   // The subject lesson is the first one with an unlit entry.
@@ -62,6 +65,7 @@ export function Home() {
       <main {...stylex.props(ui.content)}>
         <h1 tabIndex={-1} {...stylex.props(ui.h1, styles.h1)}>{name === '' ? 'Hej.' : `Hej, ${name}.`}</h1>
         <p {...stylex.props(ui.body)}>{windowsLine(countLit(progress), totalEntries(), first.title)}</p>
+        <VoiceNotice voice={speech.voice} />
         <StorageNote />
         <div {...stylex.props(styles.section)}>
           <Skyline lessons={lessons} progress={progress} />

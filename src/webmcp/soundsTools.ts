@@ -1,9 +1,9 @@
 import { sounds } from '../catalog/sounds'
-import type { HearResult } from '../speech/useSpeech'
+import type { HearResult, ToolVoice } from '../speech/useSpeech'
 import { fail, NO_INPUT, type Tool } from './helper'
 
 export type SoundsContext = {
-  voice: 'available' | 'none' | 'unsupported' | 'unknown'
+  voice: ToolVoice
   /** The play button's handler for one example. */
   hear: (exampleId: string) => Promise<HearResult>
 }

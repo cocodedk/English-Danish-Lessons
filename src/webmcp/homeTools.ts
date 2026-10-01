@@ -1,9 +1,10 @@
 import { getLesson, lessons, totalEntries } from '../catalog'
+import type { ToolVoice } from '../speech/useSpeech'
 import { countLit,firstUnlit, litIds, profileStore, progressStore } from '../storage/stores'
 import { isPersistent } from '../storage/core'
 import { fail, NO_INPUT, type Tool } from './helper'
 
-export function streetAnswer() {
+export function streetAnswer(voice: ToolVoice) {
   const progress = progressStore.get()
   const name = profileStore.get().name
   let next: { lessonId: string; position: number; da: string; en: string } | null = null
@@ -19,6 +20,7 @@ export function streetAnswer() {
     windowsLit: countLit(progress),
     windowsTotal: totalEntries(),
     storage: isPersistent() ? 'saved' : 'session-only',
+    voice,
     lessons: lessons.map((l) => {
       const lit = litIds(progress, l.id).length
       return { id: l.id, title: l.title, titleEn: l.titleEn, lit, total: l.entries.length, done: lit === l.entries.length }
@@ -28,14 +30,14 @@ export function streetAnswer() {
 }
 
 /** `go` receives the route to open; the same navigation the street's links make. */
-export function homeTools(go: (to: string) => void): Tool[] {
+export function homeTools(go: (to: string) => void, voice: ToolVoice): Tool[] {
   return [
     {
       name: 'get_street',
-      description: 'Returns the name, how many windows are lit, each lesson and the next entry to learn.',
+      description: 'Returns the name, how many windows are lit, whether a Danish voice is available, each lesson and the next entry to learn.',
       inputSchema: NO_INPUT,
       annotations: { readOnlyHint: true },
-      run: streetAnswer,
+      run: () => streetAnswer(voice),
     },
     {
       name: 'open_lesson',
