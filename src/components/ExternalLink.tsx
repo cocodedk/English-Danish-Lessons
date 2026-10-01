@@ -6,8 +6,8 @@ import { ui } from '../styles/ui'
 export function ExternalLink({ href, children }: { href: string; children: ReactNode }) {
   return (
     <a href={href} target="_blank" rel="noopener noreferrer" {...stylex.props(ui.focusable, ui.textLink)}>
-      {children}{' '}
-      <span {...stylex.props(ui.hidden)}>(opens in a new tab)</span>
+      {children}
+      <span {...stylex.props(ui.hidden)}>{' (opens in a new tab)'}</span>
     </a>
   )
 }

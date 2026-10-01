@@ -6,6 +6,11 @@ import { COCODE, DDO, ISSUES, LICENSE_URL, OFL, REPO } from '../links'
 const SUFFIX = ' (opens in a new tab)'
 const plain = (el: Element) => (el.textContent ?? '').split(SUFFIX).join('')
 const footerOf = (container: HTMLElement) => container.querySelector('footer')
+// The hidden note is position: absolute, which a browser computes as display: block. jsdom has no
+// stylesheet, so mirror that, or its name algorithm treats the span as inline and trims its leading space.
+const blockifyNotes = (container: HTMLElement) => {
+  container.querySelectorAll<HTMLElement>('a[target="_blank"] > span').forEach((s) => { s.style.display = 'block' })
+}
 
 describe('about page', () => {
   it('shows at #/about with its title, a main nav with nothing current, and focus on the h1 after a click', () => {
@@ -58,7 +63,7 @@ describe('about page', () => {
   })
 
   it('opens every external link in a new tab with the hidden suffix, and keeps llms.txt relative', () => {
-    renderAt('/about')
+    blockifyNotes(renderAt('/about').container)
     const external: [string, string][] = [
       ['cocode.dk', COCODE],
       ['ordnet.dk', DDO],
@@ -78,12 +83,39 @@ describe('about page', () => {
     expect(llms).toHaveAttribute('href', './llms.txt')
     expect(llms).not.toHaveAttribute('target')
   })
+
+  it('keeps each external link’s text free of stray whitespace, with the separating space inside the hidden span', () => {
+    const view = renderAt('/about')
+    blockifyNotes(view.container)
+    const links = [...view.container.querySelectorAll<HTMLAnchorElement>('a[target="_blank"]')]
+    expect(links.map((a) => a.firstChild?.textContent)).toEqual([
+      'cocode.dk', 'ordnet.dk', 'tell us on GitHub', 'SIL Open Font License', 'GitHub', 'licence', 'cocode.dk',
+    ])
+    for (const a of links) {
+      const text = a.firstChild!.textContent!
+      expect(a.firstChild!.nodeType).toBe(Node.TEXT_NODE)
+      expect(text).toBe(text.trim())
+      expect(a.querySelector('span')!.textContent).toBe(SUFFIX)
+      expect(within(view.container).getAllByRole('link', { name: `${text}${SUFFIX}` }), text).toContain(a)
+    }
+  })
+
+  it('reads without a space before the punctuation that follows a link', () => {
+    const view = renderAt('/about')
+    const paragraphs = [...view.container.querySelectorAll('main p')].map(plain)
+    expect(paragraphs).toContain('Made by Babak at cocode.dk.')
+    expect(paragraphs.some((p) => p.includes('(ordnet.dk).'))).toBe(true)
+    expect(paragraphs.some((p) => p.endsWith('tell us on GitHub.'))).toBe(true)
+    expect(paragraphs.some((p) => p.endsWith('(licence).'))).toBe(true)
+    for (const p of paragraphs) expect(p).not.toMatch(/ [.)]/)
+  })
 })
 
 describe('footer line', () => {
   it('reads "Made by Babak at cocode.dk · About" on Home, Sounds and Me, with About going to #/about', () => {
     for (const path of ['/', '/sounds', '/me']) {
       const view = renderAt(path)
+      blockifyNotes(view.container)
       const footer = footerOf(view.container)!
       expect(plain(footer), path).toBe('Made by Babak at cocode.dk · About')
       expect(within(footer).getByRole('link', { name: 'About' }), path).toHaveAttribute('href', '/about')
